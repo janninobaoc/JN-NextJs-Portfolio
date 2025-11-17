@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import SwipeableViews from 'react-swipeable-views-react-18-fix';
 import { useTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
-import Tabs from "@mui/material/Tabs";
+import Tabs from "@mui/material/Tabs";  
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -114,22 +114,6 @@ function a11yProps(index: number) {
         "aria-controls": `full-width-tabpanel-${index}`,
     };
 }
-
-// ✅ Tech stacks data
-// const techStacks = [
-//     { icon: "html.svg", language: "HTML" },
-//     { icon: "css.svg", language: "CSS" },
-//     { icon: "javascript.svg", language: "JavaScript" },
-//     { icon: "tailwind.svg", language: "Tailwind CSS" },
-//     { icon: "reactjs.svg", language: "ReactJS" },
-//     { icon: "vite.svg", language: "Vite" },
-//     { icon: "nodejs.svg", language: "Node JS" },
-//     { icon: "bootstrap.svg", language: "Bootstrap" },
-//     { icon: "firebase.svg", language: "Firebase" },
-//     { icon: "MUI.svg", language: "Material UI" },
-//     { icon: "vercel.svg", language: "Vercel" },
-//     { icon: "SweetAlert.svg", language: "SweetAlert2" },
-// ];
 
 export default function FullWidthTabs() {
     const theme = useTheme();

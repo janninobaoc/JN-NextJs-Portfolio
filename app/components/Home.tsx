@@ -85,9 +85,9 @@ const PAUSE_DURATION = 2000;
 const WORDS = ["CCT Graduate Major in Web Development", "Tech Enthusiast", "UI/UX Designer", "Lifelong Learner"];
 const TECH_STACK = ["HTML", "CSS", "Javascript", "React", "Tailwind", "NextJS", "Laravel", "MySQL", "VueJS", "Java", "Selenium", "WordPress"];
 const SOCIAL_LINKS = [
-    { icon: Github, link: "#" },
-    { icon: Linkedin, link: "#" },
-    { icon: Instagram, link: "#" },
+    { icon: Github, link: "https://github.com/janninobaoc" },
+    { icon: Linkedin, link: "https://www.linkedin.com/in/jan-nino-baoc-8ba6602a4/" },
+    { icon: Instagram, link: "https://www.instagram.com/janninobaoc/" },
 ];
 
 const Home = () => {

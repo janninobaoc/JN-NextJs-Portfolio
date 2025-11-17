@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Lexend_Mega } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/app/components/NavBar";
-import Footer from "@/app/components/Footer";
 
 const lexendMega = Lexend_Mega({
   subsets: ["latin"],
@@ -25,9 +23,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={`${lexendMega.variable} font-sans bg-[#0a192f] text-gray-200`}>
-        <Navbar />
         {children}
-        <Footer />
       </body>
     </html>
   );
