@@ -7,12 +7,12 @@ import FullscreenIcon from "@mui/icons-material/Fullscreen";
 import Image from "next/image";
 
 interface CertificateProps {
-  ImgSertif: string; // the prop for image URL
+  img: string;
 }
 
-const Certificate = ({ ImgSertif }: CertificateProps) => {
+const Certificate = ({ img }: CertificateProps) => {
+  console.log("Certificate Image URL:", img);
   const [open, setOpen] = useState(false);
-
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -38,7 +38,7 @@ const Certificate = ({ ImgSertif }: CertificateProps) => {
         {/* Certificate Image */}
         <Box sx={{ position: "relative" }}>
           <Image
-            src={ImgSertif}
+            src={img}
             alt="Certificate"
             width={500}
             height={300}
@@ -124,7 +124,7 @@ const Certificate = ({ ImgSertif }: CertificateProps) => {
 
           {/* Fullscreen Image */}
           <Image
-            src={ImgSertif}
+            src={img}
             alt="Certificate Full View"
             width={1200}
             height={800}

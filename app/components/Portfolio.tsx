@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState, useCallback, useMemo, ReactNode } from "react";
-// import { supabase } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import PropTypes from "prop-types";
-import SwipeableViews from 'react-swipeable-views-react-18-fix';
+import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
-import Tabs from "@mui/material/Tabs";  
+import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
@@ -138,46 +138,42 @@ export default function FullWidthTabs() {
         AOS.init({ once: false });
     }, []);
 
-    //   const fetchData = useCallback(async () => {
-    //     try {
-    //       const [projectsResponse, certificatesResponse] = await Promise.all([
-    //         supabase.from("projects").select("*").order("id", { ascending: true }),
-    //         supabase.from("certificates").select("*").order("id", { ascending: true }),
-    //       ]);
+    const fetchData = useCallback(async () => {
+        try {
+            const [projectsResponse, certificatesResponse] = await Promise.all([
+                supabase.from("projects").select("*").order("id", { ascending: true }),
+                supabase.from("certificates").select("*").order("id", { ascending: true }),
+            ]);
+            // console.log("Projects Response:", projectsResponse);
+            console.log("Certificates Response:", certificatesResponse);
 
-    //       if (projectsResponse.error) throw projectsResponse.error;
-    //       if (certificatesResponse.error) throw certificatesResponse.error;
+            if (projectsResponse.error) throw projectsResponse.error;
+            if (certificatesResponse.error) throw certificatesResponse.error;
 
-    //       const projectData = projectsResponse.data || [];
-    //       const certificateData = certificatesResponse.data || [];
+            const projectData = projectsResponse.data || [];
+            const certificateData = certificatesResponse.data || [];
 
-    //       setProjects(projectData);
-    //       setCertificates(certificateData);
+            setProjects(projectData);
+            setCertificates(certificateData);
 
-    //       localStorage.setItem("projects", JSON.stringify(projectData));
-    //       localStorage.setItem("certificates", JSON.stringify(certificateData));
-    //     } catch (error: any) {
-    //       console.error("Error fetching data from Supabase:", error.message);
-    //     }
-    //   }, []);
-
-    //   useEffect(() => {
-    //     const cachedProjects = localStorage.getItem("projects");
-    //     const cachedCertificates = localStorage.getItem("certificates");
-
-    //     if (cachedProjects && cachedCertificates) {
-    //       setProjects(JSON.parse(cachedProjects));
-    //       setCertificates(JSON.parse(cachedCertificates));
-    //     }
-
-    //     fetchData();
-    //   }, [fetchData]);
+            localStorage.setItem("projects", JSON.stringify(projectData));
+            localStorage.setItem("certificates", JSON.stringify(certificateData));
+        } catch (error: any) {
+            console.error("Error fetching data from Supabase:", error.message);
+        }
+    }, []);
 
     useEffect(() => {
-        setProjects(dummyProjects);
-        setCertificates(dummyCertificates);
-        // setStack(techStacks);
-    }, []);
+        const cachedProjects = localStorage.getItem("projects");
+        const cachedCertificates = localStorage.getItem("certificates");
+
+        if (cachedProjects && cachedCertificates) {
+            setProjects(JSON.parse(cachedProjects));
+            setCertificates(JSON.parse(cachedCertificates));
+        }
+
+        fetchData();
+    }, [fetchData]);
 
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => setValue(newValue);
@@ -192,9 +188,9 @@ export default function FullWidthTabs() {
 
     const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
     const displayedCertificates = showAllCertificates ? certificates : certificates.slice(0, initialItems);
-
+    console.log(['displayedCertificates', displayedCertificates])
     return (
-        <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-hidden" id="Portfolio">
+        <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-x-hidden" id="Portfolio">
             {/* Header */}
             <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
                 <h2 className="inline-block text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
@@ -268,7 +264,7 @@ export default function FullWidthTabs() {
                     index={value}
                     onChangeIndex={setValue}
                     style={{ height: "fit-content", overflow: "hidden" }}
-                > 
+                >
                     {/* Projects */}
                     <TabPanel value={value} index={0} dir={theme.direction}>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -290,7 +286,7 @@ export default function FullWidthTabs() {
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                             {displayedCertificates.map((cert, index) => (
                                 <div key={cert.id || index} data-aos="fade-up" data-aos-duration="1000">
-                                    <Certificate ImgSertif={cert.Img} />
+                                    <Certificate img={cert.img} />
                                 </div>
                             ))}
                         </div>

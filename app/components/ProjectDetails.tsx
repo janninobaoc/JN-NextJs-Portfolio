@@ -68,7 +68,7 @@ const ProjectStats = ({ project }: { project: any }) => {
           <div className="text-lg md:text-xl font-semibold text-blue-200">
             {techStackCount}
           </div>
-          <div className="text-[10px] md:text-xs text-gray-400">Total Teknologi</div>
+          <div className="text-[10px] md:text-xs text-gray-400">Total Technology</div>
         </div>
       </div>
 
@@ -80,7 +80,7 @@ const ProjectStats = ({ project }: { project: any }) => {
           <div className="text-lg md:text-xl font-semibold text-purple-200">
             {featuresCount}
           </div>
-          <div className="text-[10px] md:text-xs text-gray-400">Fitur Utama</div>
+          <div className="text-[10px] md:text-xs text-gray-400">Key Features</div>
         </div>
       </div>
     </div>
@@ -173,7 +173,7 @@ export default function ProjectDetails() {
             <div className="flex items-center space-x-1 md:space-x-2 text-sm md:text-base text-white/50">
               <span>Projects</span>
               <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
-              <span className="text-white/90 truncate">{project.Title}</span>
+              <span className="text-white/90 truncate">{project.title}</span>
             </div>
           </div>
 
@@ -184,27 +184,27 @@ export default function ProjectDetails() {
             <div className="space-y-6 md:space-y-10 animate-slideInLeft">
 
               <h1 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-transparent leading-tight">
-                {project.Title}
+                {project.title}
               </h1>
 
               <p className="text-base md:text-lg text-gray-300/90 leading-relaxed">
-                {project.Description}
+                {project.description}
               </p>
 
               <ProjectStats project={project} />
 
               {/* Buttons */}
               <div className="flex flex-wrap gap-3 md:gap-4">
-                <a href={project.Link} target="_blank" className="group relative inline-flex items-center space-x-2 px-6 py-3 bg-blue-600/10 hover:bg-blue-600/20 rounded-xl text-blue-300 border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300 backdrop-blur-xl">
+                <a href={project.link} target="_blank" className="group relative inline-flex items-center space-x-2 px-6 py-3 bg-blue-600/10 hover:bg-blue-600/20 rounded-xl text-blue-300 border border-blue-500/20 hover:border-blue-500/40 transition-all duration-300 backdrop-blur-xl">
                   <ExternalLink className="relative w-4 h-4 group-hover:rotate-12 transition-transform" />
                   <span className="relative font-medium">Live Demo</span>
                 </a>
 
                 <a
-                  href={project.Github}
+                  href={project.github}
                   target="_blank"
                   className="group relative inline-flex items-center space-x-2 px-6 py-3 bg-purple-600/10 hover:bg-purple-600/20 rounded-xl text-purple-300 border border-purple-500/20 hover:border-purple-500/40 transition-all duration-300 backdrop-blur-xl"
-                  onClick={(e) => !handleGithubClick(project.Github) && e.preventDefault()}
+                  onClick={(e) => !handleGithubClick(project.github) && e.preventDefault()}
                 >
                   <Github className="relative w-4 h-4 group-hover:rotate-12 transition-transform" />
                   <span className="relative font-medium">Github</span>
@@ -234,8 +234,8 @@ export default function ProjectDetails() {
             <div className="space-y-6 md:space-y-10 animate-slideInRight">
               <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl group">
                 <img
-                  src={project.Img}
-                  alt={project.Title}
+                  src={project.img}
+                  alt={project.title}
                   className="w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   onLoad={() => setIsImageLoaded(true)}
                 />
