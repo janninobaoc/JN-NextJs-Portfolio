@@ -31,8 +31,8 @@ const ContactPage = () => {
     setIsSubmitting(true);
 
     Swal.fire({
-      title: 'Mengirim Pesan...',
-      html: 'Harap tunggu selagi kami mengirim pesan Anda',
+      title: 'Sending message...',
+      html: 'Please wait while we send your message.',
       allowOutsideClick: false,
       didOpen: () => {
         Swal.showLoading();
@@ -40,12 +40,12 @@ const ContactPage = () => {
     });
 
     try {
-      const formSubmitUrl = 'https://formsubmit.co/ekizulfarrachman@gmail.com';
+      const formSubmitUrl = 'https://formsubmit.co/nino06jan@gmail.com';
       const submitData = new FormData();
       submitData.append('name', formData.name);
       submitData.append('email', formData.email);
       submitData.append('message', formData.message);
-      submitData.append('_subject', 'Pesan Baru dari Website Portfolio');
+      submitData.append('_subject', 'New Message from Portfolio Website');
       submitData.append('_captcha', 'false');
       submitData.append('_template', 'table');
 
@@ -54,8 +54,8 @@ const ContactPage = () => {
       });
 
       Swal.fire({
-        title: 'Berhasil!',
-        text: 'Pesan Anda telah berhasil terkirim!',
+        title: 'Succeed!',
+        text: 'Your message has been sent successfully!',
         icon: 'success',
         confirmButtonColor: '#6366f1',
         timer: 2000,
@@ -66,8 +66,8 @@ const ContactPage = () => {
     } catch (error: any) {
       if (error.request && error.request.status === 0) {
         Swal.fire({
-          title: 'Berhasil!',
-          text: 'Pesan Anda telah berhasil terkirim!',
+          title: 'Succeed!',
+          text: 'Your message has been sent successfully!',
           icon: 'success',
           confirmButtonColor: '#6366f1',
           timer: 2000,
@@ -76,8 +76,8 @@ const ContactPage = () => {
         setFormData({ name: '', email: '', message: '' });
       } else {
         Swal.fire({
-          title: 'Gagal!',
-          text: 'Terjadi kesalahan. Silakan coba lagi nanti.',
+          title: 'Failed!',
+          text: 'An error occurred. Please try again later.',
           icon: 'error',
           confirmButtonColor: '#6366f1',
         });

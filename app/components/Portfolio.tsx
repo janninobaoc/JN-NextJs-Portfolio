@@ -144,8 +144,6 @@ export default function FullWidthTabs() {
                 supabase.from("projects").select("*").order("id", { ascending: true }),
                 supabase.from("certificates").select("*").order("id", { ascending: true }),
             ]);
-            // console.log("Projects Response:", projectsResponse);
-            console.log("Certificates Response:", certificatesResponse);
 
             if (projectsResponse.error) throw projectsResponse.error;
             if (certificatesResponse.error) throw certificatesResponse.error;
@@ -188,7 +186,6 @@ export default function FullWidthTabs() {
 
     const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
     const displayedCertificates = showAllCertificates ? certificates : certificates.slice(0, initialItems);
-    console.log(['displayedCertificates', displayedCertificates])
     return (
         <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-x-hidden" id="Portfolio">
             {/* Header */}
