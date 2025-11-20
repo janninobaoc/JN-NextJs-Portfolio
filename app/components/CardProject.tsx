@@ -10,6 +10,8 @@ interface CardProjectProps {
   title: string;
   description: string;
   link?: string;
+  github?: string;
+  TeckStack?: Array<string>;
   id?: string | number;
 }
 
