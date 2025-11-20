@@ -331,7 +331,7 @@ const Comments = () => {
                     event: '*',
                     schema: 'public',
                     table: 'comments',
-                    filter: 'is_pinned=eq.false'
+                    // filter: 'is_pinned=eq.false'
                 },
                 () => {
                     fetchComments(); // Refresh comments when changes occur
@@ -383,7 +383,7 @@ const Comments = () => {
                         is_pinned: false,
                         created_at: new Date().toISOString()
                     }
-                ]);
+                ]).select();
 
             if (error) {
                 throw error;
