@@ -12,6 +12,7 @@ interface CardProjectProps {
   link?: string;
   github?: string;
   TeckStack?: Array<string>;
+  Features: Array<string>;
   id?: string | number;
 }
 
