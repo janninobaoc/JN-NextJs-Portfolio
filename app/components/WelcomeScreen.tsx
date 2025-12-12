@@ -191,7 +191,7 @@ const WelcomeScreen = ({ onLoadingComplete }: WelcomeScreenProps) => {
               {/* Website Link */}
               <motion.div className="text-center" variants={childVariants} data-aos="fade-up" data-aos-delay={1200}>
                 <a
-                  href="https://jn-next-js-portfolio-a94s.vercel.app/"
+                  href="https://jn-next-js-portfolio.vercel.app/"
                   className="inline-flex items-center gap-2 px-4 py-2 sm:px-6 sm:py-3 rounded-full relative group hover:scale-105 transition-transform duration-300"
                   target="_blank"
                   rel="noopener noreferrer"
