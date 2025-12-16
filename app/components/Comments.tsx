@@ -6,6 +6,7 @@ import { createClient } from '@supabase/supabase-js';
 import { MessageCircle, UserCircle2, Loader2, AlertCircle, Send, ImagePlus, X, Pin } from 'lucide-react';
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { createPortal } from "react-dom";
 import { supabase } from "@/lib/supabase";
 
 type CommentType = {
@@ -29,6 +30,7 @@ interface CommentData {
     content: string;
     created_at: string;
     profile_image?: string | null;
+    is_pinned?: boolean;
 }
 
 interface CommentProps {
@@ -44,58 +46,114 @@ interface CommentFormProps {
     error?: string | null;
 }
 
-const Comment = memo(({ comment, formatDate, index, isPinned = false }: CommentProps) => (
-    <div
-        className={`px-4 pt-4 pb-2 rounded-xl border transition-all group hover:shadow-lg hover:-translate-y-0.5 ${isPinned
-            ? 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border-indigo-500/30 hover:bg-gradient-to-r hover:from-indigo-500/15 hover:to-purple-500/15'
-            : 'bg-white/5 border-white/10 hover:bg-white/10'
-            }`}
-    >
-        {isPinned && (
-            <div className="flex items-center gap-2 mb-3 text-indigo-400">
-                <Pin className="w-4 h-4" />
-                <span className="text-xs font-medium uppercase tracking-wide">Pinned Comment</span>
-            </div>
-        )}
-        <div className="flex items-start gap-3">
-            {comment.profile_image ? (
-                <img
-                    src={comment.profile_image}
-                    alt={`${comment.user_name}'s profile`}
-                    className={`w-10 h-10 rounded-full object-cover border-2 flex-shrink-0  ${isPinned ? 'border-indigo-500/50' : 'border-indigo-500/30'
-                        }`}
-                    loading="lazy"
-                />
-            ) : (
-                <div className={`p-2 rounded-full text-indigo-400 group-hover:bg-indigo-500/30 transition-colors ${isPinned ? 'bg-indigo-500/30' : 'bg-indigo-500/20'
-                    }`}>
-                    <UserCircle2 className="w-5 h-5" />
+interface ReplyModalProps {
+    open: boolean;
+    onClose: () => void;
+    comment: CommentType;
+    onSubmitReply: (user_name: string, content: string) => void;
+    isSubmitting: boolean;
+}
+
+const Comment = memo(({ comment, formatDate, index, isPinned = false }: CommentProps) => {
+    const [replyOpen, setReplyOpen] = useState(false);
+    const [activeComment, setActiveComment] = useState<CommentType | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    return (
+        <div className={`px-4 pt-4 pb-2 rounded-xl border transition-all group hover:shadow-lg hover:-translate-y-0.5 ${isPinned
+            ? 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border-indigo-500/30'
+            : 'bg-white/5 border-white/10'
+            }`}>
+            {isPinned && (
+                <div className="flex items-center gap-2 mb-3 text-indigo-400">
+                    <Pin className="w-4 h-4" />
+                    <span className="text-xs font-medium uppercase tracking-wide">Pinned Comment</span>
                 </div>
             )}
-            <div className="flex-grow min-w-0">
-                <div className="flex items-center justify-between gap-4 mb-2">
-                    <div className="flex items-center gap-2">
-                        <h4 className={`font-medium truncate ${isPinned ? 'text-indigo-200' : 'text-white'
-                            }`}>
-                            {comment.user_name}
-                        </h4>
-                        {isPinned && (
-                            <span className="px-2 py-0.5 text-xs bg-indigo-500/20 text-indigo-300 rounded-full">
-                                Admin
-                            </span>
-                        )}
+            <div className="flex items-start gap-3">
+                {comment.profile_image ? (
+                    <img
+                        src={comment.profile_image}
+                        alt={`${comment.user_name}'s profile`}
+                        className={`w-10 h-10 rounded-full object-cover border-2 flex-shrink-0  ${isPinned ? 'border-indigo-500/50' : 'border-indigo-500/30'
+                            }`}
+                        loading="lazy"
+                    />
+                ) : (
+                    <div className={`p-2 rounded-full text-indigo-400 group-hover:bg-indigo-500/30 transition-colors ${isPinned ? 'bg-indigo-500/30' : 'bg-indigo-500/20'
+                        }`}>
+                        <UserCircle2 className="w-5 h-5" />
                     </div>
-                    <span className="text-xs text-gray-400 whitespace-nowrap">
-                        {formatDate(comment.created_at)}
-                    </span>
+                )}
+                <div className="flex-grow min-w-0">
+                    <div className="flex items-center justify-between gap-4 mb-2">
+                        <div className="flex items-center gap-2">
+                            <h4 className={`font-medium truncate ${isPinned ? 'text-indigo-200' : 'text-white'
+                                }`}>
+                                {comment.user_name}
+                            </h4>
+                            {isPinned && (
+                                <span className="px-2 py-0.5 text-xs bg-indigo-500/20 text-indigo-300 rounded-full">
+                                    Admin
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex flex-col items-center gap-3 whitespace-nowrap">
+                            <span className="text-xs text-gray-400">
+                                {formatDate(comment.created_at)}
+                            </span>
+
+                            {!isPinned && (
+                                <button className='text-indigo-400' onClick={() => {
+                                    setActiveComment({
+                                        ...comment,
+                                        is_pinned: comment.is_pinned ?? false,
+                                        profile_image: comment.profile_image ?? null,
+                                    });
+
+                                    setReplyOpen(true);
+                                }}>
+                                    Replies
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                    <p className="text-gray-300 text-sm break-words leading-relaxed relative bottom-2">
+                        {comment.content}
+                    </p>
                 </div>
-                <p className="text-gray-300 text-sm break-words leading-relaxed relative bottom-2">
-                    {comment.content}
-                </p>
             </div>
+            {activeComment && (
+                <ReplyModal
+                    open={replyOpen}
+                    comment={activeComment}
+                    isSubmitting={isSubmitting}
+                    onClose={() => setReplyOpen(false)}
+                    onSubmitReply={async (userName: string, replyContent: string) => {
+                        setIsSubmitting(true);
+                        try {
+                            const { error } = await supabase
+                                .from('comment-replies')
+                                .insert([{
+                                    comment_id: activeComment.id,
+                                    user_name: userName,
+                                    content: replyContent,
+                                    created_at: new Date().toISOString()
+                                }]);
+                            if (error) throw error;
+                        } catch (error) {
+                            console.error('Error adding reply: ', error);
+                        } finally {
+                            setIsSubmitting(false);
+                            setReplyOpen(false);
+                        }
+                    }}
+                />
+            )}
+
         </div>
-    </div>
-));
+    );
+});
 
 const CommentForm = memo(({ onSubmit, isSubmitting, error }: CommentFormProps) => {
     const [newComment, setNewComment] = useState<string>("");
@@ -267,6 +325,130 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }: CommentFormProps) =
         </form>
     );
 });
+
+export const ReplyModal = memo(
+    ({ open,
+        onClose,
+        comment,
+        onSubmitReply,
+        isSubmitting
+    }: ReplyModalProps) => {
+        const [reply, setReply] = useState("");
+        const [username, setUsername] = useState(""); 
+        const [replies, setReplies] = useState<any[]>([]); // replace 'any' with ReplyType if typed
+        const [loading, setLoading] = useState(false);
+
+        useEffect(() => {
+            if (!open || !comment) return;
+
+            const fetchReplies = async () => {
+                setLoading(true);
+                const { data, error } = await supabase
+                    .from("comment-replies")
+                    .select("*")
+                    .eq("comment_id", comment.id)
+                    .order("created_at", { ascending: true });
+
+                if (error) {
+                    console.error("Failed to fetch replies:", error.message);
+                } else {
+                    setReplies(data);
+                }
+                setLoading(false);
+            };
+
+            fetchReplies();
+        }, [open, comment]);
+
+
+        if (!open) return null;
+        return createPortal(
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+                <div className="bg-white/5 backdrop-blur-xl rounded-2xl w-full max-w-lg p-6 relative">
+                    <button
+                        onClick={onClose}
+                        className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+                    >
+                        <X className="w-6 h-6" />
+                    </button>
+                    <h2 className="text-xl font-semibold text-white mb-4">Reply to {comment?.user_name}</h2>
+                    <div className="space-y-4 max-h-64 overflow-y-auto mb-4">
+                        {loading ? (
+                            <div className="text-center text-gray-400">Loading replies...</div>
+                        ) : replies.length === 0 ? (
+                            <div className="text-center text-gray-400">No replies yet.</div>
+                        ) : (
+                            replies.map((reply) => (
+                                <div key={reply.id} className="flex gap-3 p-3 bg-white/10 rounded-lg">
+                                    {/* Profile image / placeholder */}
+                                    {/* <div className="flex-shrink-0">
+                                        <img
+                                            src={reply.profile_image ?? "/avatar.png"}
+                                            alt={`${reply.user_name}'s profile`}
+                                            className="w-8 h-8 rounded-full object-cover border border-white/20"
+                                        />
+                                    </div> */}
+
+                                    {/* Content */}
+                                    <div className="flex-1">
+                                        <div className="flex items-center justify-between">
+                                            <h1 className="text-sm font-medium text-indigo-400">{reply.user_name}</h1>
+                                            <span className="text-xs text-gray-400">
+                                                {new Date(reply.created_at).toLocaleString()}
+                                            </span>
+                                        </div>
+                                        <p className="text-sm text-gray-300 mt-1">{reply.content}</p>
+                                    </div>
+                                </div>
+
+                            ))
+                        )}
+                    </div>
+                    {/* Username Field */}
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="Your name..."
+                        className="w-full mb-3 p-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                    />
+
+                    {/* Reply Textarea */}
+                    <textarea
+                        value={reply}
+                        onChange={(e) => setReply(e.target.value)}
+                        placeholder="Write your reply..."
+                        className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none min-h-[80px]"
+                    />
+                    <button
+                        onClick={() => {
+                            onSubmitReply(username, reply);
+                            setUsername("");
+                            setReply("");
+                        }}
+                        disabled={isSubmitting || reply.trim() === ""}
+                        className="mt-4 w-full h-12 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-xl font-medium text-white overflow-hidden group transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                    >
+                        <div className="absolute inset-0 bg-white/20 translate-y-12 group-hover:translate-y-0 transition-transform duration-300" />
+                        <div className="relative flex items-center justify-center gap-2">
+                            {isSubmitting ? (
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    <span>Posting...</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Send className="w-4 h-4" />
+                                    <span>Post Reply</span>
+                                </>
+                            )}
+                        </div>
+                    </button>
+                </div>
+            </div>,
+            document.body
+        );
+    });
 
 const Comments = () => {
     const [pinnedComment, setPinnedComment] = useState<CommentType | null>(null);
