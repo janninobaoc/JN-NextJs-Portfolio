@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback, useMemo, ReactNode } from "react";
+import { useEffect, useState, useCallback, useRef, useMemo, ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views-react-18-fix";
@@ -17,6 +17,7 @@ import { dummyProjects, dummyCertificates, techStacks } from "@/lib/dummyData";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { Code, Award, Boxes } from "lucide-react";
+import { useSearchParams } from 'next/navigation';
 
 type ToggleButtonProps = {
     onClick: () => void;
@@ -124,8 +125,27 @@ export default function FullWidthTabs() {
     const [showAllProjects, setShowAllProjects] = useState(false);
     const [showAllCertificates, setShowAllCertificates] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
+    const searchParams = useSearchParams();
+    const portfolioRef = useRef<HTMLDivElement>(null);
 
     // ✅ Handle window safely in Next.js
+
+
+    useEffect(() => {
+        const scrollToProjectsHandler = () => {
+            if (portfolioRef.current) {
+                portfolioRef.current.scrollIntoView({ behavior: "smooth" });
+                setValue(0); // Activate Projects tab
+            }
+        };
+
+        window.addEventListener("scrollToProjects", scrollToProjectsHandler);
+
+        return () => {
+            window.removeEventListener("scrollToProjects", scrollToProjectsHandler);
+        };
+    }, []);
+
     useEffect(() => {
         if (typeof window !== "undefined") {
             setIsMobile(window.innerWidth < 768);

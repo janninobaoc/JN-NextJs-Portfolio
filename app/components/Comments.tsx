@@ -8,6 +8,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { createPortal } from "react-dom";
 import { supabase } from "@/lib/supabase";
+import toast from "react-hot-toast";
 
 type CommentType = {
     id: number;
@@ -200,23 +201,39 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }: CommentFormProps) =
 
     /** Submit handler */
     const handleSubmit = useCallback(
-        (e: React.FormEvent) => {
+        async (e: React.FormEvent) => {
             e.preventDefault();
 
-            if (!newComment.trim() || !userName.trim()) return;
+            if (!userName.trim()) {
+                toast.error("Please enter your name.");
+                return;
+            }
 
-            onSubmit({ newComment, userName, imageFile });
+            if (!newComment.trim()) {
+                toast.error("Please write a comment.");
+                return;
+            }
 
-            setNewComment("");
-            setUserName("");
-            setImagePreview(null);
-            setImageFile(null);
+            try {
+                await onSubmit({ newComment, userName, imageFile });
 
-            if (fileInputRef.current) fileInputRef.current.value = "";
-            if (textareaRef.current) textareaRef.current.style.height = "auto";
+                toast.success("Comment posted successfully!");
+
+                setNewComment("");
+                setUserName("");
+                setImagePreview(null);
+                setImageFile(null);
+
+                if (fileInputRef.current) fileInputRef.current.value = "";
+                if (textareaRef.current) textareaRef.current.style.height = "auto";
+            } catch (err) {
+                console.error(err);
+                toast.error("Failed to post comment. Please try again.");
+            }
         },
         [newComment, userName, imageFile, onSubmit]
     );
+
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -334,7 +351,7 @@ export const ReplyModal = memo(
         isSubmitting
     }: ReplyModalProps) => {
         const [reply, setReply] = useState("");
-        const [username, setUsername] = useState(""); 
+        const [username, setUsername] = useState("");
         const [replies, setReplies] = useState<any[]>([]); // replace 'any' with ReplyType if typed
         const [loading, setLoading] = useState(false);
 
@@ -421,15 +438,26 @@ export const ReplyModal = memo(
                         className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none min-h-[80px]"
                     />
                     <button
-                        onClick={() => {
-                            onSubmitReply(username, reply);
-                            setUsername("");
-                            setReply("");
+                        onClick={async () => {
+                            if (!username.trim() || !reply.trim()) {
+                                toast.error("Please enter your name and reply.");
+                                return;
+                            }
+
+                            try {
+                                await onSubmitReply(username, reply);
+                                toast.success("Reply posted successfully!");
+                                setUsername("");
+                                setReply("");
+                            } catch (err) {
+                                console.error(err);
+                                toast.error("Failed to post reply. Please try again.");
+                            }
                         }}
                         disabled={isSubmitting || reply.trim() === ""}
-                        className="mt-4 w-full h-12 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-xl font-medium text-white overflow-hidden group transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100 disabled:cursor-not-allowed"
+                        className="mt-4 w-full h-12 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-xl font-medium text-white overflow-hidden group transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100"
                     >
-                        <div className="absolute inset-0 bg-white/20 translate-y-12 group-hover:translate-y-0 transition-transform duration-300" />
+                        <div className="absolute inset-0 bg-white/20 translate-y-12 group-hover:translate-y-0 transition-transform duration-300 pointer-events-none" />
                         <div className="relative flex items-center justify-center gap-2">
                             {isSubmitting ? (
                                 <>
