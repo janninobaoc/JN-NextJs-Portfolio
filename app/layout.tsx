@@ -26,7 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${lexendMega.variable} font-sans bg-[#0a192f] text-gray-200`}>
         {children}
         <Toaster
-          position="center-top"
+          position="top-center"
           toastOptions={{
             style: {
               background: "#111",
