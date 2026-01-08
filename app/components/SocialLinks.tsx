@@ -10,11 +10,13 @@ import {
 } from "lucide-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import ThemedGradient from "./ThemedGradient";
+import { useTheme } from "next-themes";
 
 const socialLinks = [
   {
     name: "LinkedIn",
-    displayName: "Let's Connect",
+    displayName: <ThemedGradient>Let's Connect</ThemedGradient>,
     subText: "on LinkedIn",
     icon: Linkedin,
     url: "https://www.linkedin.com/in/jan-nino-baoc-8ba6602a4/",
@@ -24,7 +26,7 @@ const socialLinks = [
   },
   {
     name: "Instagram",
-    displayName: "Instagram",
+    displayName: <ThemedGradient>Instagram</ThemedGradient>,
     subText: "@jn",
     icon: Instagram,
     url: "https://www.instagram.com/janninobaoc/",
@@ -33,7 +35,7 @@ const socialLinks = [
   },
   {
     name: "YouTube",
-    displayName: "YouTube",
+    displayName: <ThemedGradient>YouTube</ThemedGradient>,
     subText: "@jn",
     icon: Youtube,
     url: "https://www.youtube.com/feed/you",
@@ -42,18 +44,21 @@ const socialLinks = [
   },
   {
     name: "GitHub",
-    displayName: "GitHub",
+    displayName: <ThemedGradient>GitHub</ThemedGradient>,
     subText: "@jn",
     icon: Github,
     url: "https://github.com/janninobaoc",
-    color: "#ffffff",
+    color: {
+      light: "#000000",
+      dark: "#ffffff",
+    },
     gradient: "from-[#333] to-[#24292e]",
   },
   {
     name: "TikTok",
-    displayName: "Tiktok",
+    displayName: <ThemedGradient>TikTok</ThemedGradient>,
     subText: "@jn",
-    icon: ({ className, ...props }: { className?: string; [key: string]: any }) => (
+    icon: ({ className, ...props }: { className?: string;[key: string]: any }) => (
       <svg
         width="24px"
         height="24px"
@@ -89,6 +94,8 @@ const SocialLinks = () => {
   const linkedIn = socialLinks.find((l) => l.isPrimary);
   const otherLinks = socialLinks.filter((l) => !l.isPrimary);
   const [instagram, youtube, github, tiktok] = otherLinks;
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   useEffect(() => {
     AOS.init({ offset: 10 });
@@ -99,13 +106,22 @@ const SocialLinks = () => {
   }
 
   return (
-    <div className="w-full bg-gradient-to-br from-white/10 to-white/5 rounded-2xl p-6 py-8 backdrop-blur-xl">
+    <div
+      className={`
+    w-full rounded-2xl p-6 py-8 backdrop-blur-xl
+    ${isDark
+          ? "bg-gradient-to-br from-white/10 to-white/5"
+          : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"}
+  `}
+    >
       <h3
         className="text-xl font-semibold text-white mb-6 flex items-center gap-2"
-        data-aos="fade-down" 
+        data-aos="fade-down"
       >
         <span className="inline-block w-8 h-1 bg-indigo-500 rounded-full"></span>
-        Connect With Me
+        <ThemedGradient>
+          Connect With Me
+        </ThemedGradient>
       </h3>
 
       <div className="flex flex-col gap-4">
@@ -114,11 +130,12 @@ const SocialLinks = () => {
           href={linkedIn?.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="group relative flex items-center justify-between p-4 rounded-lg 
-                     bg-white/5 border border-white/10 overflow-hidden
-                     hover:border-white/20 transition-all duration-500"
+          className={`group relative flex items-center justify-between p-4 rounded-lg 
+              bg-white/5 overflow-hidden
+              border ${isDark ? 'border-white/10 hover:border-white/20' : 'border-black/10 hover:border-black/20'}
+              transition-all duration-500`}
           data-aos="fade-up"
-          data-aos-delay="100" 
+          data-aos-delay="100"
         >
           {/* Hover Gradient Background */}
           <div
@@ -133,12 +150,18 @@ const SocialLinks = () => {
               <div
                 className="absolute inset-0 opacity-20 rounded-md transition-all duration-500
                                group-hover:scale-110 group-hover:opacity-30"
-                style={{ backgroundColor: linkedIn?.color }}
+                style={{ backgroundColor: typeof linkedIn?.color === "object"
+                  ? linkedIn?.color[isDark ? "dark" : "light"]
+                  : linkedIn?.color, // fallback if it's just a string
+                }}
               />
               <div className="relative p-2 rounded-md">
                 <linkedIn.icon
                   className="w-6 h-6 transition-all duration-500 group-hover:scale-105"
-                  style={{ color: linkedIn?.color }}
+                  style={{ color: typeof linkedIn?.color === "object"
+                    ? linkedIn?.color[isDark ? "dark" : "light"]
+                    : linkedIn?.color, // fallback if it's just a string
+                  }}
                 />
               </div>
             </div>
@@ -178,11 +201,11 @@ const SocialLinks = () => {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex items-center gap-3 p-4 rounded-xl 
-                               bg-white/5 border border-white/10 overflow-hidden
-                               hover:border-white/20 transition-all duration-500"
-              data-aos="fade-up" 
-              data-aos-delay={200 + index * 100} 
+              className={`group relative flex items-center gap-3 p-4 rounded-xl 
+                               bg-white/5 border ${isDark ? 'border-white/10 hover:border-white/20' : 'border-black/10 hover:border-black/20'} overflow-hidden
+                               hover:border-white/20 transition-all duration-500`}
+              data-aos="fade-up"
+              data-aos-delay={200 + index * 100}
             >
               <div
                 className={`absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500
@@ -193,12 +216,18 @@ const SocialLinks = () => {
                 <div
                   className="absolute inset-0 opacity-20 rounded-lg transition-all duration-500
                                        group-hover:scale-125 group-hover:opacity-30"
-                  style={{ backgroundColor: link.color }}
+                  style={{ backgroundColor: typeof link.color === "object"
+                    ? link.color[isDark ? "dark" : "light"]
+                    : link.color, // fallback if it's just a string
+                  }}
                 />
                 <div className="relative p-2 rounded-lg">
                   <link.icon
                     className="w-5 h-5 transition-all duration-500 group-hover:scale-110"
-                    style={{ color: link.color }}
+                    style={{ color: typeof link.color === "object"
+                      ? link.color[isDark ? "dark" : "light"]
+                      : link.color, // fallback if it's just a string
+                    }}
                   />
                 </div>
               </div>
@@ -237,10 +266,10 @@ const SocialLinks = () => {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative flex items-center gap-3 p-4 rounded-xl 
-                               bg-white/5 border border-white/10 overflow-hidden
-                               hover:border-white/20 transition-all duration-500"
-              data-aos="fade-up" 
+              className={`group relative flex items-center gap-3 p-4 rounded-xl 
+                               bg-white/5 border ${isDark ? 'border-white/10 hover:border-white/20' : 'border-black/10 hover:border-black/20'} overflow-hidden
+                               hover:border-white/20 transition-all duration-500`}
+              data-aos="fade-up"
               data-aos-delay={400 + index * 100}
             >
               <div
@@ -251,13 +280,21 @@ const SocialLinks = () => {
               <div className="relative flex items-center justify-center">
                 <div
                   className="absolute inset-0 opacity-20 rounded-lg transition-all duration-500
-                                       group-hover:scale-125 group-hover:opacity-30"
-                  style={{ backgroundColor: link.color }}
+             group-hover:scale-125 group-hover:opacity-30"
+                  style={{
+                    backgroundColor: typeof link.color === "object"
+                      ? link.color[isDark ? "dark" : "light"]
+                      : link.color, // fallback if it's just a string
+                  }}
                 />
                 <div className="relative p-2 rounded-lg">
                   <link.icon
                     className="w-5 h-5 transition-all duration-500 group-hover:scale-110"
-                    style={{ color: link.color }}
+                    style={{
+                      color: typeof link.color === "object"
+                        ? link.color[isDark ? "dark" : "light"]
+                        : link.color, // fallback if it’s a string
+                    }}
                   />
                 </div>
               </div>

@@ -7,6 +7,8 @@ import {
   ChevronRight, Layers, Layout, Globe, Package, Cpu, Code,
 } from "lucide-react";
 import Swal from "sweetalert2";
+import ThemedGradient from "./ThemedGradient";
+import { useTheme } from 'next-themes';
 
 const TECH_ICONS: any = {
   HTML: "/svg/html.svg",
@@ -53,14 +55,42 @@ const TechBadge = ({ tech }: { tech: string }) => {
 
 // ---------------------- FEATURE ----------------------
 const FeatureItem = ({ feature }: { feature: string }) => {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
   return (
-    <li className="group flex items-start space-x-3 p-2.5 md:p-3.5 rounded-xl hover:bg-white/5 transition-all duration-300 border border-transparent hover:border-white/10">
+    <li
+      className={`group flex items-start space-x-3 p-2.5 md:p-3.5 rounded-xl
+        transition-all duration-300 border
+        ${isDark
+          ? "hover:bg-white/5 hover:border-white/10 border-transparent"
+          : "hover:bg-gray-100 hover:border-gray-300 border-gray-200"
+        }`}
+    >
+      {/* Dot Indicator */}
       <div className="relative mt-2">
-        <div className="absolute -inset-1 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-full blur group-hover:opacity-100 opacity-0 transition-opacity duration-300" />
-        <div className="relative w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-gradient-to-r from-blue-400 to-purple-400 group-hover:scale-125 transition-transform duration-300" />
+        <div
+          className={`absolute -inset-1 rounded-full blur transition-opacity duration-300
+            ${isDark
+              ? "bg-gradient-to-r from-blue-600/20 to-purple-600/20 group-hover:opacity-100 opacity-0"
+              : "bg-gradient-to-r from-blue-200/30 to-purple-200/30 group-hover:opacity-100 opacity-0"
+            }`}
+        />
+        <div className={`relative w-1.5 h-1.5 md:w-2 md:h-2 rounded-full
+          ${isDark
+            ? "bg-gradient-to-r from-blue-400 to-purple-400"
+            : "bg-gradient-to-r from-blue-500 to-purple-500"
+          } group-hover:scale-125 transition-transform duration-300`}
+        />
       </div>
-      <span className="text-sm md:text-base text-gray-300 group-hover:text-white transition-colors">
-        {feature}
+
+      {/* Feature Text */}
+      <span className={`text-sm md:text-base transition-colors
+        ${isDark ? "text-gray-300 group-hover:text-white" : "text-gray-800 group-hover:text-gray-900"}
+      `}>
+        <ThemedGradient>
+          {feature}
+        </ThemedGradient>
       </span>
     </li>
   );
@@ -158,9 +188,11 @@ export default function ProjectDetails() {
       </div>
     );
   }
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   return (
-    <div className="min-h-screen bg-[#030014] px-[2%] sm:px-0 relative overflow-hidden">
+    <div className="min-h-screen px-[2%] sm:px-0 relative overflow-hidden">
 
       {/* backgrounds same as original */}
       <div className="fixed inset-0">
@@ -180,16 +212,42 @@ export default function ProjectDetails() {
           <div className="flex items-center space-x-2 md:space-x-4 mb-8 md:mb-12 animate-fadeIn">
             <button
               onClick={() => router.back()}
-              className="group inline-flex items-center space-x-1.5 md:space-x-2 px-3 md:px-5 py-2 md:py-2.5 bg-white/5 backdrop-blur-xl rounded-xl text-white/90 hover:bg-white/10 transition-all duration-300 border border-white/10 hover:border-white/20 text-sm md:text-base"
+              className={`group inline-flex items-center space-x-1.5 md:space-x-2 px-3 md:px-5 py-2 md:py-2.5 backdrop-blur-xl rounded-xl
+                   transition-all duration-300 text-sm md:text-base
+                    ${isDark
+                  ? "bg-white/5 text-white/90 hover:bg-white/10 border border-white/10 hover:border-white/20"
+                  : "bg-white text-gray-900 hover:bg-gray-100 border border-gray-300 hover:border-gray-400"
+                }
+          `}
             >
-              <ArrowLeft className="w-4 h-4 md:w-5 md:h-5 group-hover:-translate-x-1 transition-transform" />
-              <span>Back</span>
+              <ArrowLeft
+                className={`w-4 h-4 md:w-5 md:h-5 transition-transform group-hover:-translate-x-1
+                  ${isDark ? "text-white/80" : "text-gray-800"}
+               `}
+              />
+              <span>
+                <ThemedGradient>
+                  Back
+                </ThemedGradient>
+              </span>
             </button>
 
             <div className="flex items-center space-x-1 md:space-x-2 text-sm md:text-base text-white/50">
-              <span>Projects</span>
-              <ChevronRight className="w-3 h-3 md:w-4 md:h-4" />
-              <span className="text-white/90 truncate">{project.title}</span>
+              <span>
+                <ThemedGradient>
+                  Projects
+                </ThemedGradient>
+              </span>
+              <ChevronRight
+                className={`w-3 h-3 md:w-4 md:h-4 transition-colors
+                   ${isDark ? "text-white/80" : "text-gray-600"}
+                   `}
+              />
+              <span className="text-white/90 truncate">
+                <ThemedGradient>
+                  {project.title}
+                </ThemedGradient>
+              </span>
             </div>
           </div>
 
@@ -199,12 +257,14 @@ export default function ProjectDetails() {
             {/* LEFT SIDE */}
             <div className="space-y-6 md:space-y-10 animate-slideInLeft">
 
-              <h1 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-transparent leading-tight">
+              <h1 className="text-3xl md:text-6xl font-bold bg-gradient-to-r from-blue-300 via-purple-300 to-pink-400 bg-clip-text text-transparent leading-tight">
                 {project.title}
               </h1>
 
               <p className="text-base md:text-lg text-gray-300/90 leading-relaxed">
-                {project.description}
+                <ThemedGradient>
+                  {project.description}
+                </ThemedGradient>
               </p>
 
               <ProjectStats project={project} />
@@ -231,7 +291,9 @@ export default function ProjectDetails() {
               <div className="space-y-4 md:space-y-6">
                 <h3 className="text-lg md:text-xl font-semibold text-white/90 flex items-center gap-3">
                   <Code2 className="w-5 h-5 text-blue-400" />
-                  Technologies Used
+                  <ThemedGradient>
+                    Technologies Used
+                  </ThemedGradient>
                 </h3>
 
                 {project.TechStack.length > 0 ? (
@@ -241,7 +303,11 @@ export default function ProjectDetails() {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-gray-400 opacity-50">No technologies added.</p>
+                  <p className="text-gray-400 opacity-50">
+                    <ThemedGradient>
+                      No technologies added.
+                    </ThemedGradient>
+                  </p>
                 )}
               </div>
             </div>
@@ -259,10 +325,16 @@ export default function ProjectDetails() {
               </div>
 
               {/* FEATURES */}
-              <div className="bg-white/[0.02] backdrop-blur-xl rounded-2xl p-8 border border-white/10 space-y-6 hover:border-white/20 transition-colors">
+              <div className={`
+              ${isDark
+                  ? "bg-white/[0.02] border-white/10 hover:border-white/20"
+                  : "bg-white border-gray-300 hover:border-gray/20"}
+                backdrop-blur-xl rounded-2xl p-8 border space-y-6 transition-colors`}>
                 <h3 className="text-xl font-semibold text-white/90 flex items-center gap-3">
                   <Star className="w-5 h-5 text-yellow-400" />
-                  Key Features
+                  <ThemedGradient>
+                    Key Features
+                  </ThemedGradient>
                 </h3>
 
                 {project.Features.length > 0 ? (
@@ -272,7 +344,11 @@ export default function ProjectDetails() {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-gray-400 opacity-50">No features added.</p>
+                  <p className="text-gray-400 opacity-50">
+                    <ThemedGradient>
+                      No features added.
+                    </ThemedGradient>
+                  </p>
                 )}
               </div>
             </div>
@@ -307,7 +383,7 @@ export default function ProjectDetails() {
         }
         .animate-slideInRight { animation: slideInRight .7s ease-out; }
       `}</style>
-    </div>
+    </div >
   );
 };
 

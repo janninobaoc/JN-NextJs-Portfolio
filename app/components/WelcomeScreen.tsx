@@ -5,6 +5,8 @@ import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { Code2, Github, Globe, User } from 'lucide-react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { useTheme } from "next-themes";
+import ThemedGradient from './ThemedGradient';
 
 interface WelcomeScreenProps {
   onLoadingComplete?: () => void;
@@ -64,42 +66,54 @@ const BackgroundEffect = () => (
     </div>
     <div className="absolute inset-0 bg-gradient-to-r from-[oklch(0.19_0.03_264.18_/0.2)] to-[hsl(260,50%,40%)/0.2] blur-3xl animate-pulse" />
     <div className="absolute inset-0 bg-gradient-to-tr from-[oklch(0.19_0.03_264.18_/0.2)] via-transparent to-[hsl(260,50%,40%)/0.2] blur-2xl animate-float" />
-        <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
-        <svg
-          className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
-          viewBox="0 0 1155 678"
-        >
-          <path
-            fill="url(#ecb5b0c9-546c-4772-8c71-4d3f06d544bc)"
-            fillOpacity=".1"
-            d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
-          />
-          <defs>
-            <linearGradient
-              id="ecb5b0c9-546c-4772-8c71-4d3f06d544bc"
-              x1="1155.49"
-              x2="-78.208"
-              y1=".177"
-              y2="474.645"
-              gradientUnits="userSpaceOnUse"
-            >
-              <stop stopColor="#9A70FF" />
-              <stop offset={1} stopColor="#838aff" />
-            </linearGradient>
-          </defs>
-        </svg>
-      </div>
-  </div>
-);
-
-const IconButton = ({ Icon }: { Icon: React.ElementType }) => (
-  <div className="relative group hover:scale-110 transition-transform duration-300">
-    <div className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-full blur opacity-30 group-hover:opacity-75 transition duration-300" />
-    <div className="relative p-2 sm:p-3 bg-black/50 backdrop-blur-sm rounded-full border border-white/10">
-      <Icon className="w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8 text-white" />
+    <div className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
+      <svg
+        className="relative left-[calc(50%+3rem)] h-[21.1875rem] max-w-none -translate-x-1/2 sm:left-[calc(50%+36rem)] sm:h-[42.375rem]"
+        viewBox="0 0 1155 678"
+      >
+        <path
+          fill="url(#ecb5b0c9-546c-4772-8c71-4d3f06d544bc)"
+          fillOpacity=".1"
+          d="M317.219 518.975L203.852 678 0 438.341l317.219 80.634 204.172-286.402c1.307 132.337 45.083 346.658 209.733 145.248C936.936 126.058 882.053-94.234 1031.02 41.331c119.18 108.451 130.68 295.337 121.53 375.223L855 299l21.173 362.054-558.954-142.079z"
+        />
+        <defs>
+          <linearGradient
+            id="ecb5b0c9-546c-4772-8c71-4d3f06d544bc"
+            x1="1155.49"
+            x2="-78.208"
+            y1=".177"
+            y2="474.645"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stopColor="#9A70FF" />
+            <stop offset={1} stopColor="#838aff" />
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
   </div>
 );
+
+const IconButton = ({ Icon }: { Icon: React.ElementType }) => {
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+  return (
+    <div className="relative group hover:scale-110 transition-transform duration-300">
+      <div className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-full blur opacity-30 group-hover:opacity-75 transition duration-300" />
+      <div
+        className={`relative p-2 sm:p-3 backdrop-blur-sm rounded-full border transition-colors
+      ${isDark ? "bg-black/50 border-white/10" : "bg-white border-gray-300"}
+    `}
+      >
+        <Icon
+          className={`w-5 h-5 sm:w-6 sm:h-6 md:w-8 md:h-8
+        ${isDark ? "text-white" : "text-gray-800"}
+      `}
+        />
+      </div>
+    </div>
+  );
+};
 
 
 const containerVariants: Variants = {
@@ -134,12 +148,20 @@ const WelcomeScreen = ({ onLoadingComplete }: WelcomeScreenProps) => {
 
     return () => clearTimeout(timer);
   }, [onLoadingComplete]);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
+  if (!mounted) return null;
 
   return (
     <AnimatePresence>
       {isLoading && (
         <motion.div
-          className="fixed inset-0 bg-[#030014]"
+          className={`fixed inset-0 ${isDark ? "bg-[#030014]" : "bg-white"}`}
           initial="initial"
           animate="animate"
           exit="exit"
@@ -167,21 +189,33 @@ const WelcomeScreen = ({ onLoadingComplete }: WelcomeScreenProps) => {
               <motion.div className="text-center mb-6 sm:mb-8 md:mb-12" variants={childVariants}>
                 <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold space-y-2 sm:space-y-4">
                   <div className="mb-2 sm:mb-4">
-                    <span data-aos="fade-right" data-aos-delay="200" className="inline-block px-2 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                    <span data-aos="fade-right" data-aos-delay="200" className={`inline-block px-2 ${isDark
+                      ? "bg-gradient-to-r from-white via-blue-100 to-purple-200"
+                      : "bg-gradient-to-r from-gray-900 via-indigo-700 to-purple-700"} bg-clip-text text-transparent`}>
                       Welcome
                     </span>{' '}
-                    <span data-aos="fade-right" data-aos-delay="400" className="inline-block px-2 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                    <span data-aos="fade-right" data-aos-delay="400" className={`inline-block px-2 ${isDark
+                      ? "bg-gradient-to-r from-white via-blue-100 to-purple-200"
+                      : "bg-gradient-to-r from-gray-900 via-indigo-700 to-purple-700"} bg-clip-text text-transparent`}>
                       To
                     </span>{' '}
-                    <span data-aos="fade-right" data-aos-delay="600" className="inline-block px-2 bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                    <span data-aos="fade-right" data-aos-delay="600" className={`inline-block px-2 ${isDark
+                      ? "bg-gradient-to-r from-white via-blue-100 to-purple-200"
+                      : "bg-gradient-to-r from-gray-900 via-indigo-700 to-purple-700"} bg-clip-text text-transparent`}>
                       My
                     </span>
                   </div>
                   <div>
-                    <span data-aos="fade-up" data-aos-delay="800" className="inline-block px-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    <span data-aos="fade-up" data-aos-delay="800" className={`inline-block px-2
+                    ${isDark
+                        ? "bg-gradient-to-r from-indigo-600 to-purple-600"
+                        : "bg-gradient-to-r from-gray-900 via-indigo-700 to-purple-700"}
+                      bg-clip-text text-transparent`}>
                       Portfolio
                     </span>{' '}
-                    <span data-aos="fade-up" data-aos-delay="1000" className="inline-block px-2 bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                    <span data-aos="fade-up" data-aos-delay="1000" className={`inline-block px-2 ${isDark
+                      ? "bg-gradient-to-r from-indigo-600 to-purple-600"
+                      : "bg-gradient-to-r from-gray-900 via-indigo-700 to-purple-700"} bg-clip-text text-transparent`}>
                       Website
                     </span>
                   </div>
@@ -196,12 +230,31 @@ const WelcomeScreen = ({ onLoadingComplete }: WelcomeScreenProps) => {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/20 rounded-full blur-md group-hover:blur-lg transition-all duration-300" />
+                  <div
+                    className={`absolute inset-0 rounded-full blur-md group-hover:blur-lg transition-all duration-300
+    ${isDark
+                        ? "bg-gradient-to-r from-white/10 to-white/20"
+                        : "bg-gradient-to-r from-black/10 to-black/20"
+                      }
+  `}
+                  />
+
                   <div className="relative flex items-center gap-2 text-lg sm:text-xl md:text-2xl">
-                    <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
-                    <span className="bg-gradient-to-r from-white/80 via-white/60 to-white/40 bg-clip-text text-transparent">
-                      <TypewriterEffect text="www.jn.portfolio" />
+                    <Globe
+                      className={`w-4 h-4 sm:w-5 sm:h-5 ${isDark ? "text-white" : "text-gray-700"
+                        }`}
+                    />
+                    <span
+                      className={`bg-clip-text text-transparent ${isDark
+                        ? "bg-gradient-to-r from-white/80 via-white/60 to-white/40"
+                        : "bg-gradient-to-r from-gray-900 via-indigo-700 to-purple-700"
+                        }`}
+                    >
+                      <ThemedGradient>
+                        <TypewriterEffect text="www.jn.portfolio" />
+                      </ThemedGradient>
                     </span>
+
                   </div>
                 </a>
               </motion.div>

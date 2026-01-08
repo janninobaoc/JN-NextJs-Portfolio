@@ -8,6 +8,8 @@ import 'aos/dist/aos.css';
 import axios from 'axios';
 import SocialLinks from '../components/SocialLinks';
 import Comments from '../components/Comments';
+import ThemedGradient from './ThemedGradient';
+import { useTheme } from "next-themes";
 
 const ContactPage = () => {
   const [formData, setFormData] = useState({
@@ -86,6 +88,8 @@ const ContactPage = () => {
       setIsSubmitting(false);
     }
   };
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
 
   return (
     <div className="px-[5%] sm:px-[5%] lg:px-[10%]">
@@ -104,7 +108,9 @@ const ContactPage = () => {
           data-aos-duration="1100"
           className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2"
         >
-         Have a question? Send me a message, and I’ll respond as soon as possible.
+          <ThemedGradient>
+            Have a question? Send me a message, and I’ll respond as soon as possible.
+          </ThemedGradient>
         </p>
       </div>
 
@@ -120,7 +126,9 @@ const ContactPage = () => {
                   Contact
                 </h2>
                 <p className="text-gray-400">
-                  Anything you'd like to discuss? Send me a message and let's talk.
+                  <ThemedGradient>
+                    Anything you'd like to discuss? Send me a message and let's talk.
+                  </ThemedGradient>
                 </p>
               </div>
               <Share2 className="w-10 h-10 text-[#6366f1] opacity-50" />
@@ -128,7 +136,12 @@ const ContactPage = () => {
 
             <form onSubmit={handleSubmit} className="space-y-6">
               <div data-aos="fade-up" data-aos-delay="100" className="relative group">
-                <User className="absolute left-4 top-4 w-5 h-5 text-gray-400 group-focus-within:text-[#6366f1] transition-colors" />
+                <User
+                  className={`absolute left-4 top-4 w-5 h-5 transition-colors
+                    ${isDark ? "text-gray-400" : "text-gray-500"}
+                     group-focus-within:text-[#6366f1] `}
+                />
+
                 <input
                   type="text"
                   name="name"
@@ -136,13 +149,22 @@ const ContactPage = () => {
                   value={formData.name}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="w-full p-4 pl-12 bg-white/10 rounded-xl border border-white/20 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-[#6366f1]/30 transition-all duration-300 hover:border-[#6366f1]/30 disabled:opacity-50"
+                  className={`w-full p-4 pl-12 rounded-xl border transition-all duration-300
+                    focus:outline-none focus:ring-2 focus:ring-[#6366f1]/30
+                    hover:border-[#6366f1]/40 disabled:opacity-50
+                    ${isDark
+                      ? "bg-white/10 border-white/20 text-white placeholder-gray-500"
+                      : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
+                    }
+                     `}
                   required
                 />
               </div>
 
               <div data-aos="fade-up" data-aos-delay="200" className="relative group">
-                <Mail className="absolute left-4 top-4 w-5 h-5 text-gray-400 group-focus-within:text-[#6366f1] transition-colors" />
+                <Mail className={`absolute left-4 top-4 w-5 h-5 transition-colors
+                    ${isDark ? "text-gray-400" : "text-gray-500"}
+                     group-focus-within:text-[#6366f1] `} />
                 <input
                   type="email"
                   name="email"
@@ -150,20 +172,36 @@ const ContactPage = () => {
                   value={formData.email}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="w-full p-4 pl-12 bg-white/10 rounded-xl border border-white/20 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-[#6366f1]/30 transition-all duration-300 hover:border-[#6366f1]/30 disabled:opacity-50"
+                 className={`w-full p-4 pl-12 rounded-xl border transition-all duration-300
+                    focus:outline-none focus:ring-2 focus:ring-[#6366f1]/30
+                    hover:border-[#6366f1]/40 disabled:opacity-50
+                    ${isDark
+                      ? "bg-white/10 border-white/20 text-white placeholder-gray-500"
+                      : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
+                    }
+                     `}
                   required
                 />
               </div>
 
               <div data-aos="fade-up" data-aos-delay="300" className="relative group">
-                <MessageSquare className="absolute left-4 top-4 w-5 h-5 text-gray-400 group-focus-within:text-[#6366f1] transition-colors" />
+                <MessageSquare className={`absolute left-4 top-4 w-5 h-5 transition-colors
+                    ${isDark ? "text-gray-400" : "text-gray-500"}
+                     group-focus-within:text-[#6366f1] `} />
                 <textarea
                   name="message"
                   placeholder="Your Message"
                   value={formData.message}
                   onChange={handleChange}
                   disabled={isSubmitting}
-                  className="w-full resize-none p-4 pl-12 bg-white/10 rounded-xl border border-white/20 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-[#6366f1]/30 transition-all duration-300 hover:border-[#6366f1]/30 h-[9.9rem] disabled:opacity-50"
+                 className={`w-full p-4 pl-12 rounded-xl border transition-all duration-300
+                    focus:outline-none focus:ring-2 focus:ring-[#6366f1]/30
+                    hover:border-[#6366f1]/40 disabled:opacity-50
+                    ${isDark
+                      ? "bg-white/10 border-white/20 text-white placeholder-gray-500"
+                      : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
+                    }
+                     `}
                   required
                 />
               </div>

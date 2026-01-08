@@ -18,6 +18,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Code, Award, Boxes } from "lucide-react";
 import { useSearchParams } from 'next/navigation';
+import ThemedGradient from "./ThemedGradient";
 
 type ToggleButtonProps = {
     onClick: () => void;
@@ -32,58 +33,55 @@ interface TabPanelProps {
 }
 
 
-// ✅ Reusable toggle button
-const ToggleButton = ({ onClick, isShowingMore }: ToggleButtonProps) => (
-    <button
-        onClick={onClick}
-        className="
-      px-3 py-1.5
-      text-slate-300 
-      hover:text-white 
-      text-sm 
-      font-medium 
-      transition-all 
-      duration-300 
-      ease-in-out
-      flex 
-      items-center 
-      gap-2
-      bg-white/5 
-      hover:bg-white/10
-      rounded-md
-      border 
-      border-white/10
-      hover:border-white/20
-      backdrop-blur-sm
-      group
-      relative
-      overflow-hidden
-    "
-    >
-        <span className="relative z-10 flex items-center gap-2">
-            {isShowingMore ? "See Less" : "See More"}
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className={`
-          transition-transform 
-          duration-300 
-          ${isShowingMore ? "group-hover:-translate-y-0.5" : "group-hover:translate-y-0.5"}
-        `}
-            >
-                <polyline points={isShowingMore ? "18 15 12 9 6 15" : "6 9 12 15 18 9"}></polyline>
-            </svg>
-        </span>
-        <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-purple-500/50 transition-all duration-300 group-hover:w-full"></span>
-    </button>
-);
+// :white_check_mark: Reusable toggle button
+const ToggleButton = ({ onClick, isShowingMore }: ToggleButtonProps) => {
+    const theme = useTheme();
+    const isDark = theme.palette.mode === 'dark';
+    const textColor = isDark ? 'text-gray-300 hover:text-white' : 'text-gray-800 hover:text-black';
+    const bgColor = isDark ? 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20' : 'bg-black/5 hover:bg-black/10 border-black/10 hover:border-black/20';
+    const underlineColor = isDark ? 'bg-purple-500/50' : 'bg-purple-400/50';
+    const arrowStroke = isDark ? 'stroke-current text-gray-300' : 'stroke-current text-gray-800';
+
+    return (
+        <button
+            onClick={onClick}
+            className={`
+        px-3 py-1.5 
+        ${textColor} 
+        text-sm font-medium 
+        transition-all duration-300 ease-in-out
+        flex items-center gap-2
+        ${bgColor}
+        rounded-md
+        backdrop-blur-sm
+        group
+        relative
+        overflow-hidden
+      `}
+        >
+            <span className="relative z-10 flex items-center gap-2">
+                {isShowingMore ? 'See Less' : 'See More'}
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className={`
+            transition-transform duration-300 ${arrowStroke} 
+            ${isShowingMore ? 'group-hover:-translate-y-0.5' : 'group-hover:translate-y-0.5'}
+          `}
+                >
+                    <polyline points={isShowingMore ? '18 15 12 9 6 15' : '6 9 12 15 18 9'}></polyline>
+                </svg>
+            </span>
+            <span className={`absolute bottom-0 left-0 w-0 h-0.5 ${underlineColor} transition-all duration-300 group-hover:w-full`}></span>
+        </button>
+    );
+};
 
 function TabPanel({ children, value, index, ...other }: TabPanelProps) {
     return (
@@ -128,7 +126,7 @@ export default function FullWidthTabs() {
     const searchParams = useSearchParams();
     const portfolioRef = useRef<HTMLDivElement>(null);
 
-    // ✅ Handle window safely in Next.js
+    // :white_check_mark: Handle window safely in Next.js
 
 
     useEffect(() => {
@@ -207,14 +205,16 @@ export default function FullWidthTabs() {
     const displayedProjects = showAllProjects ? projects : projects.slice(0, initialItems);
     const displayedCertificates = showAllCertificates ? certificates : certificates.slice(0, initialItems);
     return (
-        <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] bg-[#030014] overflow-x-hidden" id="Portfolio">
+        <div className="md:px-[10%] px-[5%] w-full sm:mt-0 mt-[3rem] overflow-x-hidden" id="Portfolio">
             {/* Header */}
             <div className="text-center pb-10" data-aos="fade-up" data-aos-duration="1000">
                 <h2 className="inline-block text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#6366f1] to-[#a855f7]">
                     Portfolio Showcase
                 </h2>
                 <p className="text-slate-400 max-w-2xl mx-auto text-sm md:text-base mt-2">
-                    Explore the projects, certifications, and technologies that define my professional growth.
+                    <ThemedGradient>
+                        Explore the projects, certifications, and technologies that define my professional growth.
+                    </ThemedGradient>
                 </p>
             </div>
 
@@ -222,9 +222,12 @@ export default function FullWidthTabs() {
                 <AppBar
                     position="static"
                     elevation={0}
-                    sx={{
+                    sx={(theme) => ({
                         bgcolor: "transparent",
-                        border: "1px solid rgba(255,255,255,0.1)",
+                        border:
+                            theme.palette.mode === "dark"
+                                ? "1px solid rgba(255,255,255,0.1)"
+                                : "1px solid rgba(0,0,0,0.08)",
                         borderRadius: "20px",
                         position: "relative",
                         overflow: "hidden",
@@ -232,11 +235,14 @@ export default function FullWidthTabs() {
                             content: '""',
                             position: "absolute",
                             inset: 0,
-                            background: "linear-gradient(180deg, rgba(139,92,246,0.03), rgba(59,130,246,0.03))",
+                            background:
+                                theme.palette.mode === "dark"
+                                    ? "linear-gradient(180deg, rgba(139,92,246,0.03), rgba(59,130,246,0.03))"
+                                    : "linear-gradient(180deg, rgba(99,102,241,0.06), rgba(59,130,246,0.04))",
                             backdropFilter: "blur(10px)",
                             zIndex: 0,
                         },
-                    }}
+                    })}
                     className="md:px-4"
                 >
                     <Tabs

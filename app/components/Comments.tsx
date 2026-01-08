@@ -9,6 +9,8 @@ import "aos/dist/aos.css";
 import { createPortal } from "react-dom";
 import { supabase } from "@/lib/supabase";
 import toast from "react-hot-toast";
+import ThemedGradient from './ThemedGradient';
+import { useTheme } from "next-themes";
 
 type CommentType = {
     id: number;
@@ -59,12 +61,25 @@ const Comment = memo(({ comment, formatDate, index, isPinned = false }: CommentP
     const [replyOpen, setReplyOpen] = useState(false);
     const [activeComment, setActiveComment] = useState<CommentType | null>(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
+    const borderColor = isPinned
+        ? isDark
+            ? "border-indigo-400/50"
+            : "border-indigo-500/50"
+        : isDark
+            ? "border-gray-600/30"
+            : "border-gray-300/30";
 
     return (
-        <div className={`px-4 pt-4 pb-2 rounded-xl border transition-all group hover:shadow-lg hover:-translate-y-0.5 ${isPinned
-            ? 'bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border-indigo-500/30'
-            : 'bg-white/5 border-white/10'
-            }`}>
+        <div
+            className={`px-4 pt-4 pb-2 rounded-xl border transition-all group hover:shadow-lg hover:-translate-y-0.5 ${isPinned
+                    ? "bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border-indigo-500/30"
+                    : isDark
+                        ? "bg-white/5 border-white/20 text-white placeholder-gray-500"
+                        : "bg-white/5 border-gray-300 text-gray-900 placeholder-gray-400"
+                }`}
+        >
             {isPinned && (
                 <div className="flex items-center gap-2 mb-3 text-indigo-400">
                     <Pin className="w-4 h-4" />
@@ -89,12 +104,25 @@ const Comment = memo(({ comment, formatDate, index, isPinned = false }: CommentP
                 <div className="flex-grow min-w-0">
                     <div className="flex items-center justify-between gap-4 mb-2">
                         <div className="flex items-center gap-2">
-                            <h4 className={`font-medium truncate ${isPinned ? 'text-indigo-200' : 'text-white'
-                                }`}>
+                            <h4
+                                className={`font-medium truncate ${isPinned
+                                    ? isDark
+                                        ? "text-indigo-400"   // dark theme pinned color
+                                        : "text-indigo-600"   // light theme pinned color
+                                    : isDark
+                                        ? "text-white"         // dark theme regular
+                                        : "text-black"         // light theme regular
+                                    }`}
+                            >
                                 {comment.user_name}
                             </h4>
                             {isPinned && (
-                                <span className="px-2 py-0.5 text-xs bg-indigo-500/20 text-indigo-300 rounded-full">
+                                <span
+                                    className={`px-2 py-0.5 text-xs rounded-full ${isDark
+                                        ? "bg-indigo-500/20 text-indigo-300"  // dark theme
+                                        : "bg-indigo-400/30 text-indigo-700"  // light theme
+                                        }`}
+                                >
                                     Admin
                                 </span>
                             )}
@@ -119,7 +147,10 @@ const Comment = memo(({ comment, formatDate, index, isPinned = false }: CommentP
                             )}
                         </div>
                     </div>
-                    <p className="text-gray-300 text-sm break-words leading-relaxed relative bottom-2">
+                    <p
+                        className={`text-sm break-words leading-relaxed relative bottom-2 ${isDark ? "text-gray-300" : "text-gray-700"
+                            }`}
+                    >
                         {comment.content}
                     </p>
                 </div>
@@ -233,13 +264,15 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }: CommentFormProps) =
         },
         [newComment, userName, imageFile, onSubmit]
     );
+    const { theme } = useTheme();
+    const isDark = theme === "dark";
 
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2" data-aos="fade-up" data-aos-duration="1000">
                 <label className="block text-sm font-medium text-white">
-                    Name <span className="text-red-400">*</span>
+                    <ThemedGradient>Name</ThemedGradient> <span className="text-red-400">*</span>
                 </label>
                 <input
                     type="text"
@@ -247,14 +280,19 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }: CommentFormProps) =
                     onChange={(e) => setUserName(e.target.value)}
                     maxLength={15}
                     placeholder="Enter your name"
-                    className="w-full p-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all"
+                    className={`w-full p-3 rounded-xl 
+                    ${isDark
+                            ? "bg-white/5 border-white/10 text-white placeholder-gray-400"
+                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
+                        }
+                     border focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all`}
                     required
                 />
             </div>
 
             <div className="space-y-2" data-aos="fade-up" data-aos-duration="1200">
                 <label className="block text-sm font-medium text-white">
-                    Message <span className="text-red-400">*</span>
+                    <ThemedGradient>Message</ThemedGradient> <span className="text-red-400">*</span>
                 </label>
                 <textarea
                     ref={textareaRef}
@@ -263,16 +301,27 @@ const CommentForm = memo(({ onSubmit, isSubmitting, error }: CommentFormProps) =
 
                     onChange={handleTextareaChange}
                     placeholder="Write your message here..."
-                    className="w-full p-4 rounded-xl bg-white/5 border border-white/10 text-white placeholder-gray-400 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none min-h-[120px]"
+                    className={`w-full p-4 rounded-xl 
+                        ${isDark
+                            ? "bg-white/5 border-white/10 text-white placeholder-gray-400"
+                            : "bg-white border-gray-300 text-gray-900 placeholder-gray-400"
+                        } 
+                        border focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all resize-none min-h-[120px]`}
                     required
                 />
             </div>
 
             <div className="space-y-2" data-aos="fade-up" data-aos-duration="1400">
                 <label className="block text-sm font-medium text-white">
-                    Profile Photo <span className="text-gray-400">(optional)</span>
+                    <ThemedGradient>Profile Photo</ThemedGradient> <span className="text-gray-400">(optional)</span>
                 </label>
-                <div className="flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-xl">
+                <div className={`flex items-center gap-4 p-4 
+                ${isDark
+                        ? "bg-white/5 border-white/10"
+                        : "bg-white border-gray-300"
+                    } 
+                          border rounded-xl`}
+                >
                     {imagePreview ? (
                         <div className="flex items-center gap-4">
                             <img
@@ -639,7 +688,7 @@ const Comments = () => {
                         <MessageCircle className="w-6 h-6 text-indigo-400" />
                     </div>
                     <h3 className="text-xl font-semibold text-white">
-                        Comments <span className="text-indigo-400">({totalComments})</span>
+                        <ThemedGradient>Comments</ThemedGradient> <span className="text-indigo-400">({totalComments})</span>
                     </h3>
                 </div>
             </div>

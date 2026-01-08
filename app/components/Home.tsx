@@ -5,21 +5,34 @@ import { Github, Linkedin, Mail, ExternalLink, Instagram, Sparkles } from "lucid
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
+import { useTheme } from 'next-themes';
+import ThemedGradient from "./ThemedGradient";
 // Memoized Components
-const StatusBadge = memo(() => (
-    <div className="inline-block animate-float lg:mx-0" data-aos="zoom-in" data-aos-delay="400">
-        <div className="relative group">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-full blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
-            <div className="relative px-3 sm:px-4 py-2 rounded-full bg-black/40 backdrop-blur-xl border border-white/10">
-                <span className="bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-transparent bg-clip-text sm:text-sm text-[0.7rem] font-medium flex items-center">
-                    <Sparkles className="sm:w-4 sm:h-4 w-3 h-3 mr-2 text-blue-400" />
-                    Ready to Innovate
-                </span>
+const StatusBadge = memo(() => {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === 'dark';
+
+    return (
+        <div className="inline-block animate-float lg:mx-0" data-aos="zoom-in" data-aos-delay="400">
+            <div className="relative group">
+                {/* Gradient glow behind */}
+                <div className="absolute -inset-0.5 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-full blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+
+                {/* Main badge container */}
+                <div
+                    className={`relative px-3 sm:px-4 py-2 rounded-full backdrop-blur-xl border transition-colors
+            ${isDark ? 'bg-black/40 border-white/10' : 'bg-white/40 border-black/10'}
+          `}
+                >
+                    <ThemedGradient className="sm:text-sm text-[0.7rem] font-medium flex items-center">
+                        <Sparkles className="sm:w-4 sm:h-4 w-3 h-3 mr-2 text-blue-400" />
+                        Ready to Innovate
+                    </ThemedGradient>
+                </div>
             </div>
         </div>
-    </div>
-));
+    );
+});
 
 const MainTitle = memo(() => (
     <div className="space-y-2" data-aos="fade-up" data-aos-delay="600">
@@ -27,7 +40,9 @@ const MainTitle = memo(() => (
             <span className="relative inline-block">
                 <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
                 <span className="relative bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-                    FullStack
+                    <ThemedGradient>
+                        FullStack
+                    </ThemedGradient>
                 </span>
             </span>
             <br />
@@ -41,42 +56,141 @@ const MainTitle = memo(() => (
     </div>
 ));
 
-const TechStack = memo(({ tech }: { tech: string }) => (
-    <div className="px-4 py-2 hidden sm:block rounded-full bg-white/5 backdrop-blur-sm border border-white/10 text-sm text-gray-300 hover:bg-white/10 transition-colors">
-        {tech}
-    </div>
-));
 
-const CTAButton = memo(({ href, text, icon: Icon }: { href: string; text: string; icon: any }) => (
-    <a href={href}>
-        <button className="group relative w-[160px]">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-[#4f52c9] to-[#8644c5] rounded-xl opacity-50 blur-md group-hover:opacity-90 transition-all duration-700"></div>
-            <div className="relative h-11 bg-[#030014] backdrop-blur-xl rounded-lg border border-white/10 leading-none overflow-hidden">
-                <div className="absolute inset-0 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 bg-gradient-to-r from-[#4f52c9]/20 to-[#8644c5]/20"></div>
-                <span className="absolute inset-0 flex items-center justify-center gap-2 text-sm group-hover:gap-3 transition-all duration-300">
-                    <span className="bg-gradient-to-r from-gray-200 to-white bg-clip-text text-transparent font-medium z-10">
-                        {text}
+const TechStack = ({ tech }: { tech: string }) => {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === 'dark';
+
+    return (
+        <div
+            className={`px-4 py-2 hidden sm:block rounded-full backdrop-blur-sm border text-sm transition-colors
+        ${isDark ? 'bg-white/5 border-white/10 hover:bg-white/10 text-gray-300' : 'bg-black/5 border-black/20 hover:bg-black/10 text-gray-900'}
+      `}
+        >
+            <ThemedGradient>{tech}</ThemedGradient>
+        </div>
+    );
+};
+
+const CTAButton = memo(({ href, text, icon: Icon }: { href: string; text: string; icon: any }) => {
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
+
+    // Adjust background and text gradients based on theme
+    const buttonBg = isDark
+        ? "bg-[#030014]"
+        : "bg-white shadow-sm";
+
+    const borderColor = isDark
+        ? "border-white/10"
+        : "border-black/10";
+
+    const iconColor = isDark
+        ? "text-gray-200"
+        : "text-gray-800";
+
+    const iconHover = isDark
+        ? "group-hover:text-white"
+        : "group-hover:text-black";
+
+    const glowOpacity = isDark
+        ? "opacity-50 group-hover:opacity-90"
+        : "opacity-30 group-hover:opacity-60";
+
+    const gradientOuter = isDark
+        ? "from-[#4f52c9] to-[#8644c5]" // dark gradient
+        : "from-[#a3a3ff] to-[#c084fc]"; // light gradient
+
+    const gradientOverlay = isDark
+        ? "from-[#4f52c9]/20 to-[#8644c5]/20"
+        : "from-[#a3a3ff]/20 to-[#c084fc]/20";
+
+    const textGradient = isDark
+        ? "from-gray-200 to-white"
+        : "from-black to-gray-700";
+
+    return (
+        <a href={href}>
+            <button className="group relative w-[160px]">
+                {/* Outer glow gradient */}
+                <div
+                    className={`absolute -inset-0.5 bg-gradient-to-r ${gradientOuter} rounded-xl blur-md ${glowOpacity} transition-all duration-700`}
+                ></div>
+
+
+                {/* Inner button */}
+                <div
+                    className={`relative h-11 ${buttonBg} backdrop-blur-xl rounded-lg border ${borderColor} leading-none overflow-hidden`}
+                >
+                    {/* Hover overlay */}
+                    <div
+                        className={`absolute inset-0 scale-x-0 group-hover:scale-x-100 origin-left transition-transform duration-500 bg-gradient-to-r ${gradientOverlay}`}
+                    ></div>
+
+                    {/* Content */}
+                    <span className="absolute inset-0 flex items-center justify-center gap-2 group-hover:gap-3 transition-all duration-300">
+                        <span
+                            className={`bg-gradient-to-r ${textGradient} bg-clip-text text-transparent font-medium z-10`}
+                        >
+                            {text}
+                        </span>
+                        <Icon
+                            className={`w-4 h-4 ${iconColor} ${iconHover} ${text === "Contact"
+                                ? "group-hover:translate-x-1"
+                                : "group-hover:rotate-45"} transform transition-all duration-300 z-10`}
+                        />
                     </span>
-                    <Icon
-                        className={`w-4 h-4 text-gray-200 ${text === "Contact" ? "group-hover:translate-x-1" : "group-hover:rotate-45"
-                            } transform transition-all duration-300 z-10`}
-                    />
-                </span>
-            </div>
-        </button>
-    </a>
-));
+                </div>
+            </button>
+        </a>
+    );
+});
 
-const SocialLink = memo(({ icon: Icon, link }: { icon: any; link: string }) => (
-    <a href={link} target="_blank" rel="noopener noreferrer">
-        <button className="group relative p-3">
-            <div className="absolute inset-0 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300"></div>
-            <div className="relative rounded-xl bg-black/50 backdrop-blur-xl p-2 flex items-center justify-center border border-white/10 group-hover:border-white/20 transition-all duration-300">
-                <Icon className="w-5 h-5 text-gray-400 group-hover:text-white transition-colors" />
-            </div>
-        </button>
-    </a>
-));
+const SocialLink = memo(
+    ({ icon: Icon, link }: { icon: any; link: string }) => {
+        const { resolvedTheme } = useTheme();
+        const isDark = resolvedTheme === "dark";
+
+        // THEME CONTROLS
+        const outerGlow = isDark
+            ? "from-[#6366f1] to-[#a855f7]"
+            : "from-[#a5b4fc] to-[#c4b5fd]";
+
+        const innerBg = isDark
+            ? "bg-black/50"
+            : "bg-white/70";
+
+        const borderColor = isDark
+            ? "border-white/10 group-hover:border-white/20"
+            : "border-black/10 group-hover:border-black/20";
+
+        const iconColor = isDark
+            ? "text-gray-400 group-hover:text-white"
+            : "text-gray-700 group-hover:text-black";
+
+        return (
+            <a href={link} target="_blank" rel="noopener noreferrer">
+                <button className="group relative p-3">
+                    {/* Glow */}
+                    <div
+                        className={`absolute inset-0 bg-gradient-to-r ${outerGlow} rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-300`}
+                    ></div>
+
+                    {/* Button */}
+                    <div
+                        className={`relative rounded-xl ${innerBg} backdrop-blur-xl p-2 
+              flex items-center justify-center border ${borderColor}
+              transition-all duration-300`}
+                    >
+                        <Icon
+                            className={`w-5 h-5 ${iconColor} transition-colors duration-300`}
+                        />
+                    </div>
+                </button>
+            </a>
+        );
+    }
+);
 
 // Constants
 const TYPING_SPEED = 100;
@@ -150,15 +264,17 @@ const Home = () => {
         autoplay: true,
         style: { width: "100%", height: "100%" },
         className: `w-full h-full transition-all duration-500 ${isHovering
-                ? "scale-[180%] sm:scale-[160%] md:scale-[150%] lg:scale-[145%] rotate-2"
-                : "scale-[175%] sm:scale-[155%] md:scale-[145%] lg:scale-[140%]"
+            ? "scale-[180%] sm:scale-[160%] md:scale-[150%] lg:scale-[145%] rotate-2"
+            : "scale-[175%] sm:scale-[155%] md:scale-[145%] lg:scale-[140%]"
             }`,
     };
+    const { resolvedTheme } = useTheme();
+    const isDark = resolvedTheme === "dark";
 
     return (
         <div
 
-            className="min-h-screen bg-[#030014] overflow-hidden px-[5%] sm:px-[5%] lg:px-[10%]"
+            className="min-h-screen overflow-hidden px-[5%] sm:px-[5%] lg:px-[10%]"
             id="Home"
         >
             <div
@@ -180,7 +296,9 @@ const Home = () => {
                                 {/* Typing Effect */}
                                 <div className="h-8 flex items-center" data-aos="fade-up" data-aos-delay="800">
                                     <span className="text-xl md:text-2xl bg-gradient-to-r from-gray-100 to-gray-300 bg-clip-text text-transparent font-light">
-                                        {text}
+                                        <ThemedGradient>
+                                            {text}
+                                        </ThemedGradient>
                                     </span>
                                     <span className="w-[3px] h-6 bg-gradient-to-t from-[#6366f1] to-[#a855f7] ml-1 animate-blink"></span>
                                 </div>
@@ -191,7 +309,9 @@ const Home = () => {
                                     data-aos="fade-up"
                                     data-aos-delay="1000"
                                 >
-                                    Building innovative, functional, and user-friendly websites that deliver effective digital solutions.
+                                    <ThemedGradient>
+                                        Building innovative, functional, and user-friendly websites that deliver effective digital solutions.
+                                    </ThemedGradient>
                                 </p>
 
                                 {/* Tech Stack */}
@@ -226,8 +346,11 @@ const Home = () => {
                         >
                             <div className="relative w-full opacity-90">
                                 <div
-                                    className={`absolute inset-0 bg-gradient-to-r from-[#6366f1]/10 to-[#a855f7]/10 rounded-3xl blur-3xl transition-all duration-700 ease-in-out ${isHovering ? "opacity-50 scale-105" : "opacity-20 scale-100"
-                                        }`}
+                                    className={`absolute inset-0 rounded-3xl blur-3xl transition-all duration-700 ease-in-out
+                                        ${isDark
+                                            ? "bg-gradient-to-r from-[#6366f1]/10 to-[#a855f7]/10"
+                                            : "bg-gradient-to-r from-indigo-300/20 to-purple-300/20"}
+                                            ${isHovering ? "opacity-50 scale-105" : "opacity-20 scale-100"}`}
                                 ></div>
 
                                 <div
@@ -242,8 +365,13 @@ const Home = () => {
                                         }`}
                                 >
                                     <div
-                                        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-br from-indigo-500/10 to-purple-500/10 blur-3xl animate-[pulse_6s_cubic-bezier(0.4,0,0.6,1)_infinite] transition-all duration-700 ${isHovering ? "scale-110" : "scale-100"
-                                            }`}
+                                        className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
+                                             w-[400px] h-[400px] blur-3xl animate-[pulse_6s_cubic-bezier(0.4,0,0.6,1)_infinite]
+                                              transition-all duration-700
+                                               ${isDark
+                                                ? "bg-gradient-to-br from-indigo-500/10 to-purple-500/10"
+                                                : "bg-gradient-to-br from-indigo-300/20 to-purple-300/20"}
+                                                 ${isHovering ? "scale-110 opacity-50" : "scale-100 opacity-20"} `}
                                     ></div>
                                 </div>
                             </div>

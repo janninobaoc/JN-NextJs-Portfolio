@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Lexend_Mega } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
 
 const lexendMega = Lexend_Mega({
   subsets: ["latin"],
@@ -22,9 +23,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${lexendMega.variable} font-sans bg-[#0a192f] text-gray-200`}>
-        {children}
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${lexendMega.variable} font-sans text-gray-200`}>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          {children}
+        </ThemeProvider>
         <Toaster
           position="top-center"
           toastOptions={{

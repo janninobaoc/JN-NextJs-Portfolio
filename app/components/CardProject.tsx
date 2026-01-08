@@ -4,6 +4,8 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink, ArrowRight } from "lucide-react";
+import { useTheme } from "next-themes";
+import ThemedGradient from "./ThemedGradient";
 
 interface CardProjectProps {
   img: string;
@@ -31,10 +33,20 @@ const CardProject: React.FC<CardProjectProps> = ({ img, title, description, link
       alert("Project details are not available");
     }
   };
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   return (
     <div className="group relative w-full">
-      <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-900/90 to-slate-800/90 backdrop-blur-lg border border-white/10 shadow-2xl transition-all duration-300 hover:shadow-purple-500/20">
+      <div
+        className={`
+    relative overflow-hidden rounded-xl backdrop-blur-lg border shadow-2xl
+    transition-all duration-300 hover:shadow-purple-500/20
+    ${isDark
+            ? "bg-gradient-to-br from-slate-900/90 to-slate-800/90 border-white/10"
+            : "bg-white/50 border-black/10 shadow-lg"}
+  `}
+      >
         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
 
         <div className="relative p-5 z-10">
@@ -49,12 +61,19 @@ const CardProject: React.FC<CardProjectProps> = ({ img, title, description, link
           </div>
 
           <div className="mt-4 space-y-3">
-            <h3 className="text-xl font-semibold bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200 bg-clip-text text-transparent">
+            <h3
+              className={`text-xl font-semibold bg-clip-text text-transparent ${isDark
+                ? 'bg-gradient-to-r from-blue-200 via-purple-200 to-pink-200'
+                : 'bg-gradient-to-r from-blue-300 via-purple-400 to-pink-300'
+                }`}
+            >
               {title}
             </h3>
 
             <p className="text-gray-300/80 text-sm leading-relaxed line-clamp-2">
-              {description}
+              <ThemedGradient>
+                {description}
+              </ThemedGradient>
             </p>
 
             <div className="pt-4 flex items-center justify-between">
@@ -77,10 +96,23 @@ const CardProject: React.FC<CardProjectProps> = ({ img, title, description, link
                 <Link
                   href={`/project/${id}`}
                   onClick={handleDetails}
-                  className="inline-flex items-center space-x-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white/90 transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+                  className={`
+        inline-flex items-center space-x-2 px-4 py-2 rounded-lg
+        transition-all duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-500/50
+        ${isDark
+                      ? "bg-white/5 hover:bg-white/10 text-white/90"
+                      : "bg-white border-gray-300 text-gray-900"}
+      `}
                 >
-                  <span className="text-sm font-medium">Details</span>
-                  <ArrowRight className="w-4 h-4" />
+                  <span className="text-sm font-medium">
+                    <ThemedGradient>
+                      Details
+                    </ThemedGradient>
+                  </span>
+                  <ArrowRight
+                    className="w-4 h-4"
+                    style={{ color: isDark ? '#FFFFFF' : '#000000' }}
+                  />
                 </Link>
               ) : (
                 <span className="text-gray-500 text-sm">Details Not Available</span>
