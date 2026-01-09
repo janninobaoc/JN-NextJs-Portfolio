@@ -24,7 +24,7 @@ const TypewriterEffect = ({ text }: { text: string }) => {
       } else {
         clearInterval(timer);
       }
-    }, 260);
+    }, 120);
 
     return () => clearInterval(timer);
   }, [text]);
@@ -191,17 +191,17 @@ const WelcomeScreen = ({ onLoadingComplete }: WelcomeScreenProps) => {
                   <div className="mb-2 sm:mb-4">
                     <span data-aos="fade-right" data-aos-delay="200" className={`inline-block px-2 ${isDark
                       ? "bg-gradient-to-r from-white via-blue-100 to-purple-200"
-                      : "bg-gradient-to-r from-gray-900 via-indigo-700 to-purple-700"} bg-clip-text text-transparent`}>
+                      : "bg-gradient-to-r from-black via-gray-600 to-gray-800"} bg-clip-text text-transparent`}>
                       Welcome
                     </span>{' '}
                     <span data-aos="fade-right" data-aos-delay="400" className={`inline-block px-2 ${isDark
                       ? "bg-gradient-to-r from-white via-blue-100 to-purple-200"
-                      : "bg-gradient-to-r from-gray-900 via-indigo-700 to-purple-700"} bg-clip-text text-transparent`}>
+                      : "bg-gradient-to-r from-black via-gray-600 to-gray-800"} bg-clip-text text-transparent`}>
                       To
                     </span>{' '}
                     <span data-aos="fade-right" data-aos-delay="600" className={`inline-block px-2 ${isDark
                       ? "bg-gradient-to-r from-white via-blue-100 to-purple-200"
-                      : "bg-gradient-to-r from-gray-900 via-indigo-700 to-purple-700"} bg-clip-text text-transparent`}>
+                      : "bg-gradient-to-r from-black via-gray-600 to-gray-800"} bg-clip-text text-transparent`}>
                       My
                     </span>
                   </div>
@@ -231,12 +231,10 @@ const WelcomeScreen = ({ onLoadingComplete }: WelcomeScreenProps) => {
                   rel="noopener noreferrer"
                 >
                   <div
-                    className={`absolute inset-0 rounded-full blur-md group-hover:blur-lg transition-all duration-300
-    ${isDark
+                    className={`absolute inset-0 rounded-full blur-md group-hover:blur-lg transition-all duration-300 ${isDark
                         ? "bg-gradient-to-r from-white/10 to-white/20"
                         : "bg-gradient-to-r from-black/10 to-black/20"
-                      }
-  `}
+                      } `}
                   />
 
                   <div className="relative flex items-center gap-2 text-lg sm:text-xl md:text-2xl">
@@ -251,7 +249,7 @@ const WelcomeScreen = ({ onLoadingComplete }: WelcomeScreenProps) => {
                         }`}
                     >
                       <ThemedGradient>
-                        <TypewriterEffect text="www.jn.portfolio" />
+                        <TypewriterEffect text="https://janninobaoc-jn-nextfolio.vercel.app" />
                       </ThemedGradient>
                     </span>
 

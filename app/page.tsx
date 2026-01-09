@@ -10,6 +10,7 @@ import Portfolio from "./components/Portfolio";
 import Contact from "./components/Contact";
 import Navbar from "@/app/components/NavBar";
 import Footer from "@/app/components/Footer";
+import ClientOnly from "./components/ClientOnly";
 
 export default function LandingPage() {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -26,7 +27,8 @@ export default function LandingPage() {
       {/* Main Page Sections */}
       {!showWelcome && (
         <>
-          <Navbar /> {/* <-- Moved here */}
+        <ClientOnly>
+          <Navbar />
           <Background />
           <main>
             <Home />
@@ -34,7 +36,8 @@ export default function LandingPage() {
             <Portfolio />
             <Contact />
           </main>
-          <Footer /> {/* <-- Moved here */}
+          <Footer />
+        </ClientOnly>
         </>
       )}
     </>
