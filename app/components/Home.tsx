@@ -281,7 +281,7 @@ const Home = () => {
                 className={`relative z-10 transition-all duration-1000 ${isLoaded ? "opacity-100" : "opacity-0"
                     }`}
             >
-                <div className="container mx-auto min-h-screen">
+                <div className="container mx-auto min-h-screen mt-[100px] max-h-[500px]:mt-[100px]">
                     <div className="flex flex-col lg:flex-row items-center justify-center h-screen md:justify-between gap-0 sm:gap-12 lg:gap-20">
                         {/* Left Column */}
                         <div

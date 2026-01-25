@@ -4,7 +4,8 @@ import { useEffect, useState, useCallback, useRef, useMemo, ReactNode } from "re
 import { supabase } from "@/lib/supabase";
 import PropTypes from "prop-types";
 import SwipeableViews from "react-swipeable-views-react-18-fix";
-import { useTheme } from "@mui/material/styles";
+import { useTheme as useNextTheme } from "next-themes";
+import { useTheme as useMuiTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
@@ -35,8 +36,8 @@ interface TabPanelProps {
 
 // :white_check_mark: Reusable toggle button
 const ToggleButton = ({ onClick, isShowingMore }: ToggleButtonProps) => {
-    const theme = useTheme();
-    const isDark = theme.palette.mode === 'dark';
+    const { resolvedTheme } = useNextTheme();
+    const isDark = resolvedTheme === "dark";
     const textColor = isDark ? 'text-gray-300 hover:text-white' : 'text-gray-800 hover:text-black';
     const bgColor = isDark ? 'bg-white/5 hover:bg-white/10 border-white/10 hover:border-white/20' : 'bg-black/5 hover:bg-black/10 border-black/10 hover:border-black/20';
     const underlineColor = isDark ? 'bg-purple-500/50' : 'bg-purple-400/50';
@@ -115,7 +116,7 @@ function a11yProps(index: number) {
 }
 
 export default function FullWidthTabs() {
-    const theme = useTheme();
+    const muiTheme = useMuiTheme();
     const [value, setValue] = useState(0);
     const [projects, setProjects] = useState<any[]>([]);
     const [certificates, setCertificates] = useState<any[]>([]);
@@ -283,13 +284,13 @@ export default function FullWidthTabs() {
                 </AppBar>
 
                 <SwipeableViews
-                    axis={theme.direction === "rtl" ? "x-reverse" : "x"}
+                    axis={muiTheme.direction === "rtl" ? "x-reverse" : "x"}
                     index={value}
                     onChangeIndex={setValue}
                     style={{ height: "fit-content", overflow: "hidden" }}
                 >
                     {/* Projects */}
-                    <TabPanel value={value} index={0} dir={theme.direction}>
+                    <TabPanel value={value} index={0} dir={muiTheme.direction}>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                             {displayedProjects.map((project, index) => (
                                 <div key={project.id || index} data-aos="fade-up" data-aos-duration="1000">
@@ -305,7 +306,7 @@ export default function FullWidthTabs() {
                     </TabPanel>
 
                     {/* Certificates */}
-                    <TabPanel value={value} index={1} dir={theme.direction}>
+                    <TabPanel value={value} index={1} dir={muiTheme.direction}>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                             {displayedCertificates.map((cert, index) => (
                                 <div key={cert.id || index} data-aos="fade-up" data-aos-duration="1000">
@@ -321,7 +322,7 @@ export default function FullWidthTabs() {
                     </TabPanel>
 
                     {/* Tech Stack */}
-                    <TabPanel value={value} index={2} dir={theme.direction}>
+                    <TabPanel value={value} index={2} dir={muiTheme.direction}>
                         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 pb-[5%]">
                             {techStacks.map((stack, index) => (
                                 <div key={index} data-aos="fade-up" data-aos-duration="1000">

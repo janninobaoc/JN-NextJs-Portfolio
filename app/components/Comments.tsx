@@ -74,10 +74,10 @@ const Comment = memo(({ comment, formatDate, index, isPinned = false }: CommentP
     return (
         <div
             className={`px-4 pt-4 pb-2 rounded-xl border transition-all group hover:shadow-lg hover:-translate-y-0.5 ${isPinned
-                    ? "bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border-indigo-500/30"
-                    : isDark
-                        ? "bg-white/5 border-white/20 text-white placeholder-gray-500"
-                        : "bg-white/5 border-gray-300 text-gray-900 placeholder-gray-400"
+                ? "bg-gradient-to-r from-indigo-500/10 to-purple-500/10 border-indigo-500/30"
+                : isDark
+                    ? "bg-white/5 border-white/20 text-white placeholder-gray-500"
+                    : "bg-white/5 border-gray-300 text-gray-900 placeholder-gray-400"
                 }`}
         >
             {isPinned && (
@@ -403,6 +403,8 @@ export const ReplyModal = memo(
         const [username, setUsername] = useState("");
         const [replies, setReplies] = useState<any[]>([]); // replace 'any' with ReplyType if typed
         const [loading, setLoading] = useState(false);
+        const { resolvedTheme } = useTheme();
+        const isLight = resolvedTheme === "light";
 
         useEffect(() => {
             if (!open || !comment) return;
@@ -430,7 +432,13 @@ export const ReplyModal = memo(
         if (!open) return null;
         return createPortal(
             <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-                <div className="bg-white/5 backdrop-blur-xl rounded-2xl w-full max-w-lg p-6 relative">
+                <div
+                    className={`
+                    backdrop-blur-xl rounded-2xl w-full max-w-lg p-6 relative
+                    transition-colors duration-300
+                    ${isLight ? "bg-gray-900/90" : "bg-white/5"}
+                `}
+                >
                     <button
                         onClick={onClose}
                         className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
@@ -506,7 +514,7 @@ export const ReplyModal = memo(
                         disabled={isSubmitting || reply.trim() === ""}
                         className="mt-4 w-full h-12 bg-gradient-to-r from-[#6366f1] to-[#a855f7] rounded-xl font-medium text-white overflow-hidden group transition-all duration-300 hover:scale-[1.02] hover:shadow-lg active:scale-[0.98] disabled:opacity-50 disabled:hover:scale-100"
                     >
-                        <div className="absolute inset-0 bg-white/20 translate-y-12 group-hover:translate-y-0 transition-transform duration-300 pointer-events-none" />
+                        {/* <div className="absolute inset-0 bg-white/20 translate-y-12 group-hover:translate-y-0 transition-transform duration-300 pointer-events-none" /> */}
                         <div className="relative flex items-center justify-center gap-2">
                             {isSubmitting ? (
                                 <>

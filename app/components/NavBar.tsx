@@ -93,7 +93,7 @@ const Navbar = () => {
                   : "bg-gradient-to-r from-black via-gray-600 to-gray-800"
               }`}
             >
-              <img src="/img/profile.png" alt="Logo" className="w-6 h-6 rounded-full" />
+              <img src="/img/profile6.png" alt="Logo" className="w-6 h-6 rounded-full" />
               JN
             </a>
             <ThemeToggle />

@@ -15,9 +15,9 @@ export const metadata: Metadata = {
   title: "JN | Portfolio",
   description: "Portfolio website built with Next.js",
   icons: {
-    icon: "/img/profile.png",       // Favicon for browser tab
-    apple: "/img/profile.png",      // Optional for Apple devices
-    shortcut: "/img/profile.png",   // Optional shortcut icon
+    icon: "/img/profile6.png",       // Favicon for browser tab
+    apple: "/img/profile6.png",      // Optional for Apple devices
+    shortcut: "/img/profile6.png",   // Optional shortcut icon
   },
 };
 
