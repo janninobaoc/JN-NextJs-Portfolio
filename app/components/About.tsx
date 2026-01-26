@@ -92,19 +92,19 @@ const ProfileImage = memo(() => {
             <div
               className={`absolute inset-0 rounded-full z-20 transition-all duration-700 group-hover:scale-105
                 ${isDark
-                  ? "border-4 border-white/20 group-hover:border-white/40"
-                  : "border-4 border-black/10 group-hover:border-black/20"}
+                  ? "border-0 border-white/20 group-hover:border-white/40"
+                  : "border-0 border-black/10 group-hover:border-black/20"}
               `}
             />
 
             {/* Overlays (desktop only) */}
-            <div
+            {/* <div
               className={`absolute inset-0 z-10 transition-opacity duration-700 hidden sm:block
                 ${isDark
                   ? "bg-gradient-to-b from-black/20 via-transparent to-black/40 group-hover:opacity-0"
                   : "bg-gradient-to-b from-white/40 via-transparent to-white/20 group-hover:opacity-0"}
               `}
-            />
+            /> */}
 
             <div
               className={`absolute inset-0 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 hidden sm:block
