@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useRef, useMemo, ReactNode } from "react";
 import { supabase } from "@/lib/supabase";
 import PropTypes from "prop-types";
-import SwipeableViews from "react-swipeable-views-react-18-fix";
+// import SwipeableViews from "react-swipeable-views-react-18-fix";
 import { useTheme as useNextTheme } from "next-themes";
 import { useTheme as useMuiTheme } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
@@ -283,11 +283,11 @@ export default function FullWidthTabs() {
                     </Tabs>
                 </AppBar>
 
-                <SwipeableViews
-                    axis={muiTheme.direction === "rtl" ? "x-reverse" : "x"}
-                    index={value}
-                    onChangeIndex={setValue}
-                    style={{ height: "fit-content", overflow: "hidden" }}
+                <div
+                    // axis={muiTheme.direction === "rtl" ? "x-reverse" : "x"}
+                    // index={value}
+                    // onChangeIndex={setValue}
+                    // style={{ height: "fit-content", overflow: "hidden" }}
                 >
                     {/* Projects */}
                     <TabPanel value={value} index={0} dir={muiTheme.direction}>
@@ -331,7 +331,7 @@ export default function FullWidthTabs() {
                             ))}
                         </div>
                     </TabPanel>
-                </SwipeableViews>
+                </div>
             </Box>
         </div>
     );

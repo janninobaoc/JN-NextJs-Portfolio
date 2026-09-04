@@ -197,7 +197,7 @@ const TYPING_SPEED = 100;
 const ERASING_SPEED = 50;
 const PAUSE_DURATION = 2000;
 const WORDS = ["CCT Graduate Major in Web Development", "Tech Enthusiast", "UI/UX Designer", "Lifelong Learner"];
-const TECH_STACK = ["HTML", "CSS", "Javascript", "React", "Tailwind", "NextJS", "Laravel", "MySQL", "VueJS", "Java", "Selenium", "WordPress"];
+const TECH_STACK = ["HTML", "CSS", "Javascript", "React", "Tailwind", "NextJS", "Laravel", "MySQL", "VueJS", "Java", "Selenium", "WordPress", "Git", "Github"];
 const SOCIAL_LINKS = [
     { icon: Github, link: "https://github.com/janninobaoc" },
     { icon: Linkedin, link: "https://www.linkedin.com/in/jan-nino-baoc-8ba6602a4/" },

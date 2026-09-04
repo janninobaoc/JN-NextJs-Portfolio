@@ -74,6 +74,8 @@ export const techStacks = [
   { icon: "/svg/java.svg", language: "Java" },
   { icon: "/svg/selenium.svg", language: "Selenium" },
   { icon: "/svg/wordpress.svg", language: "Wordpress" },
+  { icon: "/svg/git.svg", language: "Git" },
+  { icon: "/svg/github.svg", language: "Github" },
 ];
 
 export const dummyPinned = {

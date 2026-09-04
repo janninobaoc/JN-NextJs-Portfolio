@@ -289,10 +289,18 @@ const AboutPage = () => {
             </div>
 
             <div className="flex flex-col lg:flex-row items-center lg:items-start gap-4 lg:gap-4 lg:px-0 w-full">
-              <a href="#" className="w-full lg:w-auto">
+              {/* <a href="#" className="w-full lg:w-auto">
                 <button className="w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 shadow-lg hover:shadow-xl">
                   <FileText className="w-4 h-4 sm:w-5 sm:h-5" /> Download CV
                 </button>
+              </a> */}
+              <a
+                href="/resume/Jan-Nino-Baoc.pdf"
+                download="Jan-Nino-Baoc-CV.pdf"
+                className="w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 shadow-lg hover:shadow-xl"
+              >
+                <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
+                Download CV
               </a>
               <a href="#Portfolio" className="w-full lg:w-auto">
                 <button className="w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg border border-[#a855f7]/50 text-[#a855f7] font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 hover:bg-[#a855f7]/10">
