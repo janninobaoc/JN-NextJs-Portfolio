@@ -34,27 +34,49 @@ const StatusBadge = memo(() => {
     );
 });
 
-const MainTitle = memo(() => (
-    <div className="space-y-2" data-aos="fade-up" data-aos-delay="600">
-        <h1 className="text-5xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-7xl font-bold tracking-tight">
-            <span className="relative inline-block">
-                <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
-                <span className="relative bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
-                    <ThemedGradient>
-                        FullStack
-                    </ThemedGradient>
+const MAIN_TITLES = [
+    ["Software", "Engineer"],
+    ["Full Stack", "Developer"],
+    ["Web", "Developer"],
+];
+
+const MainTitle = memo(() => {
+    const [titleIndex, setTitleIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = window.setInterval(() => {
+            setTitleIndex((current) => (current + 1) % MAIN_TITLES.length);
+        }, 3000);
+
+        return () => window.clearInterval(interval);
+    }, []);
+
+    return (
+        <div className="space-y-2" data-aos="fade-up" data-aos-delay="600">
+            <h1
+                className="text-5xl sm:text-6xl md:text-6xl lg:text-6xl xl:text-7xl font-bold tracking-tight"
+                aria-live="polite"
+                aria-atomic="true"
+            >
+                <span key={titleIndex} className="animate-[fadeIn_500ms_ease-in-out]">
+                    <span className="relative inline-block">
+                        <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20" />
+                        <span className="relative bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent">
+                            <ThemedGradient>{MAIN_TITLES[titleIndex][0]}</ThemedGradient>
+                        </span>
+                    </span>
+                    <br />
+                    <span className="relative inline-block mt-2">
+                        <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20" />
+                        <span className="relative bg-gradient-to-r from-[#6366f1] to-[#a855f7] bg-clip-text text-transparent">
+                            {MAIN_TITLES[titleIndex][1]}
+                        </span>
+                    </span>
                 </span>
-            </span>
-            <br />
-            <span className="relative inline-block mt-2">
-                <span className="absolute -inset-2 bg-gradient-to-r from-[#6366f1] to-[#a855f7] blur-2xl opacity-20"></span>
-                <span className="relative bg-gradient-to-r from-[#6366f1] to-[#a855f7] bg-clip-text text-transparent">
-                    Developer
-                </span>
-            </span>
-        </h1>
-    </div>
-));
+            </h1>
+        </div>
+    );
+});
 
 
 const TechStack = ({ tech }: { tech: string }) => {

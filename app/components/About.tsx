@@ -270,9 +270,12 @@ const AboutPage = () => {
                 </ThemedGradient>
               </span>
             </h2>
-            <p className="text-base sm:text-lg lg:text-xl text-gray-400 leading-relaxed text-justify pb-4 sm:pb-0">
+            <p className="text-base sm:text-xl lg:text-lg text-gray-400 leading-relaxed text-justify pb-4 sm:pb-0">
               <ThemedGradient>
-                A collaborative and goal-oriented professional striving to make meaningful contributions while developing new capabilities.
+                Software Engineer with almost 3 years of experience in full-stack and frontend web development, 
+                specializing in building and maintaining reliable, responsive, and user-friendly web applications. 
+                Passionate about solving technical challenges, 
+                continuously improving my skills, and currently exploring AI technologies and automation to enhance my development workflow.
               </ThemedGradient>
             </p>
 
@@ -295,12 +298,12 @@ const AboutPage = () => {
                 </button>
               </a> */}
               <a
-                href="/resume/Jan-Nino-Baoc.pdf"
+                href="/resume/jan-nino-baoc.pdf"
                 download="Jan-Nino-Baoc-CV.pdf"
                 className="w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg bg-gradient-to-r from-[#6366f1] to-[#a855f7] text-white font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 shadow-lg hover:shadow-xl"
               >
                 <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
-                Download CV
+                Download Resume
               </a>
               <a href="#Portfolio" className="w-full lg:w-auto">
                 <button className="w-full lg:w-auto sm:px-6 py-2 sm:py-3 rounded-lg border border-[#a855f7]/50 text-[#a855f7] font-medium transition-all duration-300 hover:scale-105 flex items-center justify-center lg:justify-start gap-2 hover:bg-[#a855f7]/10">
