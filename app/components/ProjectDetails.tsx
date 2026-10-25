@@ -157,8 +157,9 @@ export default function ProjectDetails() {
   const id = params?.id as string;
 
   const [project, setProject] = useState<any>(null);
-  console.log(['project', project])
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === "dark";
 
   useEffect(() => {
     if (!id) return;
@@ -188,8 +189,6 @@ export default function ProjectDetails() {
       </div>
     );
   }
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === "dark";
 
   return (
     <div className="min-h-screen px-[2%] sm:px-0 relative overflow-hidden">

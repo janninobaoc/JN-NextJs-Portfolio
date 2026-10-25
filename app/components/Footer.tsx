@@ -6,13 +6,13 @@ const Footer = () => {
       <hr className="my-3 border-gray-400 opacity-20 sm:mx-auto lg:my-6" />
       <span className="block pb-4">
         <ThemedGradient>
-          © 2025{" "}
+          © 2026{" "}
         </ThemedGradient>
         <a
           href="https://flowbite.com/"
           className="bg-gradient-to-r from-white via-[#3B1C9C] to-[#5A3DD7] bg-clip-text text-transparent hover:underline"
         >
-          JN™
+          JN
         </a>
         <ThemedGradient>
           . All Rights Reserved.

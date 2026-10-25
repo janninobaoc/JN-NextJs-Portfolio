@@ -219,7 +219,7 @@ const TYPING_SPEED = 100;
 const ERASING_SPEED = 50;
 const PAUSE_DURATION = 2000;
 const WORDS = ["CCT Graduate Major in Web Development", "Tech Enthusiast", "UI/UX Designer", "Lifelong Learner"];
-const TECH_STACK = ["HTML", "CSS", "Javascript", "React", "Tailwind", "NextJS", "Laravel", "MySQL", "VueJS", "Java", "Selenium", "WordPress", "Git", "Github"];
+const TECH_STACK = ["HTML", "CSS", "Javascript", "React", "Tailwind", "NextJS", "Laravel", "MySQL", "VueJS", "Java", "Selenium", "WordPress", "Git", "Github", "Railway", "Supabase", "Vercel"];
 const SOCIAL_LINKS = [
     { icon: Github, link: "https://github.com/janninobaoc" },
     { icon: Linkedin, link: "https://www.linkedin.com/in/jan-nino-baoc-8ba6602a4/" },
@@ -332,16 +332,17 @@ const Home = () => {
                                     data-aos-delay="1000"
                                 >
                                     <ThemedGradient>
-                                        Building innovative, functional, and user-friendly websites that deliver effective digital solutions.
+                                        Building innovative, functional, and user-friendly websites that turn ideas into practical digital solutions. 
+                                        Combining full-stack and frontend development experience with a growing interest in AI-assisted development to create responsive and reliable web applications.
                                     </ThemedGradient>
                                 </p>
 
                                 {/* Tech Stack */}
-                                <div className="flex flex-wrap gap-3 justify-start" data-aos="fade-up" data-aos-delay="1200">
+                                {/* <div className="flex flex-wrap gap-3 justify-start" data-aos="fade-up" data-aos-delay="1200">
                                     {TECH_STACK.map((tech, index) => (
                                         <TechStack key={index} tech={tech} />
                                     ))}
-                                </div>
+                                </div> */}
 
                                 {/* CTA Buttons */}
                                 <div className="flex flex-row gap-3 w-full justify-start" data-aos="fade-up" data-aos-delay="1400">

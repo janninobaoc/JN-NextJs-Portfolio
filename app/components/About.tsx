@@ -232,10 +232,13 @@ const AboutPage = () => {
   const { totalProjects, totalCertificates, YearExperience } = useMemo(() => {
     const storedProjects = JSON.parse(localStorage.getItem("projects") || "[]");
     const storedCertificates = JSON.parse(localStorage.getItem("certificates") || "[]");
-    const startDate = new Date("2024-02-12");
+    const startDate = new Date(2024, 1, 12);
     const today = new Date();
-    const experience = today.getFullYear() - startDate.getFullYear() -
-      (today < new Date(today.getFullYear(), startDate.getMonth(), startDate.getDate()) ? 1 : 0);
+    const totalMonths  = 
+      (today.getFullYear() - startDate.getFullYear()) * 12 +
+      (today.getMonth() - startDate.getMonth()) -
+      (today.getDate() < startDate.getDate() ? 1 : 0);
+    const experience = (Math.max(0, totalMonths) / 12).toFixed(1);
 
     return {
       totalProjects: storedProjects.length,
